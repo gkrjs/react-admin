@@ -153,6 +153,7 @@ module.exports = {
         '@typescript-eslint/no-misused-promises': 0,
         '@typescript-eslint/no-unsafe-member-access': 0,
         '@typescript-eslint/no-unsafe-call': 0,
+        '@typescript-eslint/no-unsafe-argument': 0,
         '@typescript-eslint/no-unused-vars': [
             'error',
             {
