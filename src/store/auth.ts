@@ -2,16 +2,11 @@ import { createModel } from '@rematch/core';
 
 import type { RootModel } from './models';
 
-type Names = 'custom';
-type ComplexCountState = {
-    count: number;
-    multiplierName: Names;
+type AuthState = {
+    token: stirng | null;
 };
 export const auth = createModel<RootModel>()({
-    state: {
-        count: 0,
-        multiplierName: 'custom',
-    } as ComplexCountState,
+    state: { token: null },
     reducers: {
         increment(state, payload: number) {
             return {
