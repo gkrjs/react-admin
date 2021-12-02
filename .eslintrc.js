@@ -86,6 +86,7 @@ module.exports = {
                     '**/*.test.{ts,js}',
                     '**/*.spec.{ts,js}',
                     'build/**/*.{ts,js}',
+                    'mock/**/*.{ts,js}',
                     '**.{ts,js}',
                 ],
             },

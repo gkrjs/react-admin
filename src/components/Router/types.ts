@@ -1,4 +1,5 @@
 import type { MenuDataItem } from '@ant-design/pro-layout/lib/typings';
+import type { ReactElement, ReactNode } from 'react';
 import type { BrowserRouterProps, NavigateProps } from 'react-router-dom';
 
 /**
@@ -13,6 +14,7 @@ interface BaseRouteProps<
 > {
     name?: string;
     cacheKey?: string;
+    auth?: boolean;
     /**
      * @description 传给页面的额外参数,主要用于菜单
      * @type {({ hideMenu?: boolean } & P)}
@@ -108,6 +110,7 @@ export type RouteOption<M extends Record<string, any> | null = null> = (
  */
 export interface RouterConfig<M extends Record<string, any> | null = null>
     extends Omit<BrowserRouterProps, 'children'> {
+    render?: (route: RouteOption, element: ReactElement) => ReactNode;
     hash?: boolean;
     routes?: RouteOption<M>[];
 }
@@ -118,7 +121,7 @@ export type MenuOption<T extends Record<string, any> = Record<string, any>> = T 
     divide?: boolean;
     path?: string;
     url?: string;
-    icon?: React.ReactNode;
+    icon?: ReactNode;
     target?: '_parent' | '_self' | '_top' | '_blank';
     children?: MenuOption<T>[];
 };
@@ -168,6 +171,7 @@ export interface AntdRouterConfig<M extends Record<string, any> = Record<string,
 
 export interface ParentPropsForGenerator {
     basePath: string;
+    render?: (route: RouteOption, element: ReactElement) => ReactNode;
     index?: string;
     path?: string;
     name?: string;

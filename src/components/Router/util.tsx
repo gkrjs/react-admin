@@ -3,7 +3,7 @@ import loadable from '@loadable/component';
 import { trim, omit, pick } from 'lodash-es';
 
 import { createContext } from 'react';
-import type { FC } from 'react';
+import type { FC, ReactNode, ReactElement } from 'react';
 import type { RouteObject } from 'react-router-dom';
 import { Navigate, Outlet } from 'react-router-dom';
 
@@ -78,85 +78,92 @@ export const getRoutes = <M extends Record<string, any> | null>(
     parent: ParentPropsForGenerator,
 ) => {
     let nameMaps: Record<string, string> = {};
-    const data = children.map((child, index) => {
+    const data = children.map((item, index) => {
         let route: RouteObject | undefined;
         let menus: MenuOption[] = [];
         let menu: MenuOption | undefined;
         const current: ParentPropsForGenerator = {
+            ...parent,
             basePath: parent.basePath,
-            name: parent.name ? `${parent.name}.${child.name}` : child.name,
+            name: parent.name ? `${parent.name}.${item.name}` : item.name,
             index: parent.index ? `${parent.index}.${index.toString()}` : index.toString(),
         };
         // 当前项是一个外部链接
-        const isUrl = 'isUrl' in child && child.isUrl;
+        const isUrl = 'isUrl' in item && item.isUrl;
         // 当前项是一个分隔符
-        const isDivide = 'isDivide' in child && child.isDivide;
+        const isDivide = 'isDivide' in item && item.isDivide;
         // 当前项是一个路由
         const isRoute =
-            !('isUrl' in child) &&
-            !('isDivide' in child) &&
-            ('path' in child || 'index' in child || 'to' in child);
+            !('isUrl' in item) &&
+            !('isDivide' in item) &&
+            ('path' in item || 'index' in item || 'to' in item);
         // 当前项是一个跳转路由
-        const isRedirectRoute = 'to' in child;
+        const isRedirectRoute = 'to' in item;
         // 配置是一个React路由
         if (isRoute) {
-            route = { ...omit(child, ['page', 'children']) };
-            const currentPath = formatPath(child, parent.basePath, parent.path);
+            let element: ReactNode;
+            route = { ...omit(item, ['page', 'children']) };
+            const currentPath = formatPath(item, parent.basePath, parent.path);
             current.path = currentPath;
             if (current.name) {
                 nameMaps[current.name] = current.path;
             }
-            // 是一个跳转路由
+            // 当前项是一个跳转路由
             if (isRedirectRoute) {
-                route.element = <Navigate {...pick(child, ['to', 'state'])} replace />;
-                // 是一个页面路由
-            } else if (child.page) {
-                if (typeof child.page === 'string') {
+                element = <Navigate {...pick(item, ['to', 'state'])} replace />;
+                // 当前项是一个页面路由
+            } else if (item.page) {
+                if (typeof item.page === 'string') {
                     let fallback: JSX.Element | undefined;
-                    if (child.loading) {
-                        fallback = typeof child.loading === 'boolean' ? <Loading /> : child.loading;
+                    if (item.loading) {
+                        fallback = typeof item.loading === 'boolean' ? <Loading /> : item.loading;
                     }
-                    const Component = loadable(pages[child.page], {
-                        cacheKey: () => child.cacheKey ?? current.name ?? current.index!,
+                    const Component = loadable(pages[item.page], {
+                        cacheKey: () => item.cacheKey ?? current.name ?? current.index!,
                         fallback,
                     });
-                    route.element = <Component />;
+                    element = <Component />;
                 } else {
-                    route.element = child.page;
+                    element = item.page;
                 }
                 const AsyncPage = getAsyncPage({
-                    page: child.page as string,
-                    cacheKey: child.cacheKey ?? current.name ?? current.index!,
-                    loading: child.loading,
+                    page: item.page as string,
+                    cacheKey: item.cacheKey ?? current.name ?? current.index!,
+                    loading: item.loading,
                 });
-                route.element = typeof child.page === 'string' ? <AsyncPage /> : child.page;
+                element = typeof item.page === 'string' ? <AsyncPage /> : item.page;
             } else {
-                route.element = <Outlet />;
+                element = <Outlet />;
+            }
+            if (current.render) {
+                route.element = current.render(item, element as ReactElement);
+            } else {
+                route.element = element;
             }
         }
-        const { text, icon } = child.meta ?? {};
+        const { text, icon } = item.meta ?? {};
         // 配置是一个菜单
-        if (child.name) {
+        if (item.name) {
             menu = {
-                ...(child.meta ?? {}),
+                ...(item.meta ?? {}),
                 id: current.index!,
                 icon,
                 text: text ?? current.name ?? current.index!,
             };
-            if ('target' in child && typeof child.target === 'string') {
-                menu.target = child.target;
+            if ('target' in item && typeof item.target === 'string') {
+                menu.target = item.target;
             }
             if (isDivide) {
                 menu.divide = true;
             } else if (isUrl) {
-                menu.url = child.path;
+                menu.url = item.path;
             } else if (current.path) {
                 menu.path = current.path;
             }
         }
 
-        if (child.children) {
-            const rst = getRoutes(child.children, current);
+        if (item.children) {
+            const rst = getRoutes(item.children, current);
             if (route) route.children = rst.routes;
             nameMaps = { ...nameMaps, ...rst.nameMaps };
             if (menu) {
