@@ -1,23 +1,13 @@
-import { createModel } from '@rematch/core';
+import produce from 'immer';
+import create from 'zustand';
 
-import type { RootModel } from './models';
-
-type AuthState = {
-    token: stirng | null;
-};
-export const auth = createModel<RootModel>()({
-    state: { token: null },
-    reducers: {
-        increment(state, payload: number) {
-            return {
-                count: state.count + payload,
-                multiplierName: 'custom',
-            };
-        },
-    },
-    effects: (dispatch) => ({
-        incrementEffect(payload: number, rootState) {
-            dispatch.count.increment(payload);
-        },
-    }),
-});
+const useToken = create<{ token: null | string }>((set) => ({
+    token: null,
+    setToken: (token: string) =>
+        set(
+            produce((state) => {
+                state.token = token;
+            }),
+        ),
+    clearToken: () => set((state) => ({ ...state, token: null })),
+}));
