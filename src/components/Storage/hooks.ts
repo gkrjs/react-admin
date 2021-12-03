@@ -79,9 +79,6 @@ const useDeleteTable = () => {
 export const useStorage = () => {
     const context = useContext(StorageStateContext);
     const state = context?.state as StorageState;
-    if (!state) {
-        throw new Error('Storage not be configed,please use <Storage> wrapper your component!');
-    }
     const getDb = useGetDb();
     const deleteDb = useDeleteDb();
     const getStore = useGetStore();

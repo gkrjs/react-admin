@@ -3,15 +3,17 @@ import { Navigate, useLocation } from 'react-router-dom';
 
 import type { AntdRouteOption, RouteOption } from '../Router';
 
+import { useAuth } from './hooks';
+
 export const RequirdAuth: FC<{
     route: RouteOption | AntdRouteOption;
     path?: string;
     element: ReactElement;
 }> = ({ route: { auth }, element, path = '/auth/login' }) => {
     const location = useLocation();
-    const isAuth = false;
+    const { token } = useAuth();
     if (auth) {
-        return isAuth ? element : <Navigate to={path} state={{ from: location }} />;
+        return token ? element : <Navigate to={path} state={{ from: location }} />;
     }
     return element;
 };

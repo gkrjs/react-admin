@@ -5,44 +5,44 @@ import shallow from 'zustand/shallow';
 
 import { useStorage } from '../Storage';
 
-const useAuthStore = create<{ token: null | string }>((set) => ({
+const useAuthState = create<{ token: null | string }>((set) => ({
     token: null,
 }));
 
 export const useAuth = () => {
-    const { storeState, addTable, getStore } = useStorage();
-    const auth = useAuthStore((state) => state, shallow);
-    useEffect(() => {
-        addTable({ name: 'auth' });
-    }, []);
+    const { addTable, getStore } = useStorage();
+    const auth = useAuthState((state) => state, shallow);
+
     useEffect(() => {
         (async () => {
-            const store = getStore('auth');
-            if (store) {
-                const storgeToken = await store.getItem<string | null>('token');
+            addTable({ name: 'auth' });
+            const authStorage = getStore('auth');
+            if (authStorage) {
+                const storgeToken = await authStorage.getItem<string | null>('token');
                 if (!storgeToken) clearToken();
                 else setToken(storgeToken);
             }
         })();
-    }, [storeState]);
-    useEffect(() => {
-        (async () => {
-            const store = getStore('auth');
-            if (store) await store.setItem('token', auth.token);
-        })();
-    }, [auth.token]);
+    }, []);
+
     const setToken = async (token: string) => {
-        return useAuthStore.setState(
+        const authStorage = getStore('auth');
+        if (authStorage) await authStorage.setItem('token', auth.token);
+        return useAuthState.setState(
             produce((draft) => {
                 draft.token = token;
             }),
         );
     };
-    const clearToken = () =>
-        useAuthStore.setState(
+    const clearToken = async () => {
+        const authStorage = getStore('auth');
+        if (authStorage) await authStorage.setItem('token', null);
+        return useAuthState.setState(
             produce((draft) => {
                 draft.token = null;
             }),
         );
+    };
+
     return { ...auth, setToken, clearToken };
 };
