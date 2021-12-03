@@ -3,7 +3,13 @@ import { createContext, useContext } from 'react';
 
 import { DbActionType } from './constants';
 
-import type { DbConfig, StorageConfig, StorageContextType, TableConfig } from './types';
+import type {
+    DbConfig,
+    StorageConfig,
+    StorageContextType,
+    StorageState,
+    TableConfig,
+} from './types';
 
 export const StorageConfigContext = createContext<StorageConfig>({});
 export const StorageStateContext = createContext<StorageContextType | null>(null);
@@ -72,7 +78,10 @@ const useDeleteTable = () => {
 };
 export const useStorage = () => {
     const context = useContext(StorageStateContext);
-    const state = context?.state;
+    const state = context?.state as StorageState;
+    if (!state) {
+        throw new Error('Storage not be configed,please use <Storage> wrapper your component!');
+    }
     const getDb = useGetDb();
     const deleteDb = useDeleteDb();
     const getStore = useGetStore();
@@ -83,10 +92,10 @@ export const useStorage = () => {
         dispatch && dispatch({ type: DbActionType.ADD_DB, config: options });
     const setDefaultDb = (name: string) =>
         dispatch && dispatch({ type: DbActionType.SET_DEFAULT_DB, name });
-    const addTable = (options: TableConfig, dbname: string) =>
+    const addTable = (options: TableConfig, dbname?: string) =>
         dispatch && dispatch({ type: DbActionType.ADD_TABLE, config: options, dbname });
     return {
-        state,
+        storeState: state,
         addDb,
         setDefaultDb,
         deleteDb,
