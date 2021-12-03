@@ -45,7 +45,10 @@ export const AppRouter: FC<{ config: RouterConfig | AntdRouterConfig }> = (props
     return (
         // eslint-disable-next-line react/jsx-no-constructed-context-values
         <RouterContext.Provider value={{ basePath, routes, menus, names, setConfig }}>
-            <RouterWrapper config={pick(config, ['window', 'hash'])} routes={routes} />
+            <RouterWrapper
+                config={{ ...pick(config, ['window', 'hash']), basename: basePath }}
+                routes={routes}
+            />
         </RouterContext.Provider>
     );
 };

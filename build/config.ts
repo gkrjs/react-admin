@@ -3,6 +3,7 @@ import merge from 'deepmerge';
 import { ConfigEnv, UserConfig } from 'vite';
 
 import { getPlugins } from './plugins';
+import { createProxy } from './proxy';
 
 import { Configure } from './types';
 import { pathResolve } from './utils';
@@ -30,7 +31,14 @@ export const getConfig = (params: ConfigEnv, configure?: Configure): UserConfig 
                 },
             },
             plugins: getPlugins(isBuild),
-            server: { host: '0.0.0.0', port: 4000 },
+            server: {
+                host: true,
+                port: 4000,
+                proxy: createProxy([
+                    ['/basic-api', 'http://localhost:3000'],
+                    ['/upload', 'http://localhost:3300/upload'],
+                ]),
+            },
         },
         typeof configure === 'function' ? configure(params, isBuild) : {},
         {

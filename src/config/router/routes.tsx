@@ -6,6 +6,7 @@ export const routes: AntdRouteOption[] = [
     {
         path: '/',
         page: 'layouts/master',
+        auth: true,
         meta: { hideInMenu: true },
         children: [
             {

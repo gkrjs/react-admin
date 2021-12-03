@@ -38,6 +38,7 @@ specifiers:
   react-router-dom: '6'
   typescript: ^4.5.2
   vite: ^2.6.4
+  vite-plugin-mock: ^2.9.6
   vite-plugin-style-import: ^1.3.0
   zustand: ^3.6.5
 
@@ -82,6 +83,7 @@ devDependencies:
   prettier: registry.nlark.com/prettier/2.4.1
   typescript: registry.npmmirror.com/typescript/4.5.2
   vite: registry.npmmirror.com/vite/2.6.14_less@4.1.2
+  vite-plugin-mock: registry.nlark.com/vite-plugin-mock/2.9.6_vite@2.6.14
   vite-plugin-style-import: registry.npmmirror.com/vite-plugin-style-import/1.3.0_vite@2.6.14
 
 packages:
@@ -353,6 +355,19 @@ packages:
     version: 6.1.0
     dev: false
 
+  registry.nlark.com/@rollup/pluginutils/3.1.0:
+    resolution: {integrity: sha1-cGtFJO5tyLEDs8mVUz5a1oDAK5s=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@rollup/pluginutils/download/@rollup/pluginutils-3.1.0.tgz}
+    name: '@rollup/pluginutils'
+    version: 3.1.0
+    engines: {node: '>= 8.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0
+    dependencies:
+      '@types/estree': registry.nlark.com/@types/estree/0.0.39
+      estree-walker: registry.nlark.com/estree-walker/1.0.1
+      picomatch: registry.nlark.com/picomatch/2.3.0
+    dev: true
+
   registry.nlark.com/@rollup/pluginutils/4.1.1:
     resolution: {integrity: sha1-HU2obdTt7RVlalfZM/2iuaCNR+w=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@rollup/pluginutils/download/@rollup/pluginutils-4.1.1.tgz}
     name: '@rollup/pluginutils'
@@ -369,6 +384,12 @@ packages:
     version: 1.8.3
     dependencies:
       type-detect: registry.nlark.com/type-detect/4.0.8
+    dev: true
+
+  registry.nlark.com/@types/estree/0.0.39:
+    resolution: {integrity: sha1-4Xfmme4bjCLSMXTKqnQiZEOJUJ8=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@types/estree/download/@types/estree-0.0.39.tgz}
+    name: '@types/estree'
+    version: 0.0.39
     dev: true
 
   registry.nlark.com/@types/json5/0.0.29:
@@ -579,6 +600,13 @@ packages:
     version: 1.0.2
     dev: true
 
+  registry.nlark.com/binary-extensions/2.2.0:
+    resolution: {integrity: sha1-dfUC7q+f/eQvyYgpZFvk6na9ni0=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/binary-extensions/download/binary-extensions-2.2.0.tgz}
+    name: binary-extensions
+    version: 2.2.0
+    engines: {node: '>=8'}
+    dev: true
+
   registry.nlark.com/brace-expansion/1.1.11:
     resolution: {integrity: sha1-PH/L9SnYcibz0vUrlm/1Jx60Qd0=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/brace-expansion/download/brace-expansion-1.1.11.tgz}
     name: brace-expansion
@@ -617,6 +645,13 @@ packages:
     version: 1.1.2
     dev: true
 
+  registry.nlark.com/builtin-modules/3.2.0:
+    resolution: {integrity: sha1-RdXbmefuXmvE82LgCL+RerUEmIc=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/builtin-modules/download/builtin-modules-3.2.0.tgz}
+    name: builtin-modules
+    version: 3.2.0
+    engines: {node: '>=6'}
+    dev: true
+
   registry.nlark.com/call-bind/1.0.2:
     resolution: {integrity: sha1-sdTonmiBGcPJqQOtMKuy9qkZvjw=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/call-bind/download/call-bind-1.0.2.tgz}
     name: call-bind
@@ -650,17 +685,6 @@ packages:
       no-case: registry.nlark.com/no-case/3.0.4
       tslib: registry.nlark.com/tslib/2.3.1
       upper-case-first: registry.nlark.com/upper-case-first/2.0.2
-    dev: true
-
-  registry.nlark.com/chalk/2.4.2:
-    resolution: {integrity: sha1-zUJUFnelQzPPVBpJEIwUMrRMlCQ=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/chalk/download/chalk-2.4.2.tgz?cache=0&sync_timestamp=1631501913020&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fchalk%2Fdownload%2Fchalk-2.4.2.tgz}
-    name: chalk
-    version: 2.4.2
-    engines: {node: '>=4'}
-    dependencies:
-      ansi-styles: registry.nlark.com/ansi-styles/3.2.1
-      escape-string-regexp: registry.nlark.com/escape-string-regexp/1.0.5
-      supports-color: registry.npmmirror.com/supports-color/5.5.0
     dev: true
 
   registry.nlark.com/chalk/4.1.2:
@@ -952,11 +976,24 @@ packages:
       tslib: registry.nlark.com/tslib/2.3.1
     dev: true
 
+  registry.nlark.com/ee-first/1.1.1:
+    resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/ee-first/download/ee-first-1.1.1.tgz}
+    name: ee-first
+    version: 1.1.1
+    dev: true
+
   registry.nlark.com/emittery/0.8.1:
     resolution: {integrity: sha1-uyPMhtA7MKp1p/c0gZ3uLhunCGA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/emittery/download/emittery-0.8.1.tgz}
     name: emittery
     version: 0.8.1
     engines: {node: '>=10'}
+    dev: true
+
+  registry.nlark.com/encodeurl/1.0.2:
+    resolution: {integrity: sha1-rT/0yG7C0CkyL1oCw6mmBslbP1k=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/encodeurl/download/encodeurl-1.0.2.tgz}
+    name: encodeurl
+    version: 1.0.2
+    engines: {node: '>= 0.8'}
     dev: true
 
   registry.nlark.com/enquirer/2.3.6:
@@ -995,6 +1032,12 @@ packages:
     name: escalade
     version: 3.1.1
     engines: {node: '>=6'}
+    dev: true
+
+  registry.nlark.com/escape-html/1.0.3:
+    resolution: {integrity: sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/escape-html/download/escape-html-1.0.3.tgz}
+    name: escape-html
+    version: 1.0.3
     dev: true
 
   registry.nlark.com/escape-string-regexp/1.0.5:
@@ -1111,6 +1154,12 @@ packages:
       estraverse: registry.npmmirror.com/estraverse/5.3.0
     dev: true
 
+  registry.nlark.com/estree-walker/1.0.1:
+    resolution: {integrity: sha1-MbxdYSyWtwQQa0d+bdXYqhOMtwA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/estree-walker/download/estree-walker-1.0.1.tgz}
+    name: estree-walker
+    version: 1.0.1
+    dev: true
+
   registry.nlark.com/estree-walker/2.0.2:
     resolution: {integrity: sha1-UvAQF4wqTBF6d1fP6UKtt9LaTKw=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/estree-walker/download/estree-walker-2.0.2.tgz}
     name: estree-walker
@@ -1143,7 +1192,7 @@ packages:
     dev: true
 
   registry.nlark.com/fast-glob/3.2.7:
-    resolution: {integrity: sha1-/Wy3otfpqnp4RhEehaGW1rL3ZqE=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/fast-glob/download/fast-glob-3.2.7.tgz?cache=0&sync_timestamp=1631501914879&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ffast-glob%2Fdownload%2Ffast-glob-3.2.7.tgz}
+    resolution: {integrity: sha1-/Wy3otfpqnp4RhEehaGW1rL3ZqE=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/fast-glob/download/fast-glob-3.2.7.tgz}
     name: fast-glob
     version: 3.2.7
     engines: {node: '>=8'}
@@ -1168,7 +1217,7 @@ packages:
     dev: true
 
   registry.nlark.com/fastq/1.13.0:
-    resolution: {integrity: sha1-YWdg+Ip1Jr38WWt8q4wYk4w2uYw=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/fastq/download/fastq-1.13.0.tgz?cache=0&sync_timestamp=1631616062226&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ffastq%2Fdownload%2Ffastq-1.13.0.tgz}
+    resolution: {integrity: sha1-YWdg+Ip1Jr38WWt8q4wYk4w2uYw=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/fastq/download/fastq-1.13.0.tgz}
     name: fastq
     version: 1.13.0
     dependencies:
@@ -1199,6 +1248,21 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       to-regex-range: registry.nlark.com/to-regex-range/5.0.1
+    dev: true
+
+  registry.nlark.com/finalhandler/1.1.2:
+    resolution: {integrity: sha1-t+fQAP/RGTjQ/bBTUG9uur6fWH0=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/finalhandler/download/finalhandler-1.1.2.tgz}
+    name: finalhandler
+    version: 1.1.2
+    engines: {node: '>= 0.8'}
+    dependencies:
+      debug: registry.npmmirror.com/debug/2.6.9
+      encodeurl: registry.nlark.com/encodeurl/1.0.2
+      escape-html: registry.nlark.com/escape-html/1.0.3
+      on-finished: registry.nlark.com/on-finished/2.3.0
+      parseurl: registry.nlark.com/parseurl/1.3.3
+      statuses: registry.nlark.com/statuses/1.5.0
+      unpipe: registry.nlark.com/unpipe/1.0.0
     dev: true
 
   registry.nlark.com/flat-cache/3.0.4:
@@ -1482,6 +1546,15 @@ packages:
       has-bigints: registry.nlark.com/has-bigints/1.0.1
     dev: true
 
+  registry.nlark.com/is-binary-path/2.1.0:
+    resolution: {integrity: sha1-6h9/O4DwZCNug0cPhsCcJU+0Wwk=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/is-binary-path/download/is-binary-path-2.1.0.tgz}
+    name: is-binary-path
+    version: 2.1.0
+    engines: {node: '>=8'}
+    dependencies:
+      binary-extensions: registry.nlark.com/binary-extensions/2.2.0
+    dev: true
+
   registry.nlark.com/is-boolean-object/1.1.2:
     resolution: {integrity: sha1-XG3CACRt2TIa5LiFoRS7H3X2Nxk=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/is-boolean-object/download/is-boolean-object-1.1.2.tgz}
     name: is-boolean-object
@@ -1527,6 +1600,12 @@ packages:
     name: is-generator-fn
     version: 2.1.0
     engines: {node: '>=6'}
+    dev: true
+
+  registry.nlark.com/is-module/1.0.0:
+    resolution: {integrity: sha1-Mlj7afeMFNW4FdZkM2tM/7ZEFZE=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/is-module/download/is-module-1.0.0.tgz}
+    name: is-module
+    version: 1.0.0
     dev: true
 
   registry.nlark.com/is-negative-zero/2.0.1:
@@ -1961,7 +2040,7 @@ packages:
     dev: true
 
   registry.nlark.com/normalize-path/3.0.0:
-    resolution: {integrity: sha1-Dc1p/yOhybEf0JeDFmRKA4ghamU=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/normalize-path/download/normalize-path-3.0.0.tgz?cache=0&sync_timestamp=1631501916645&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fnormalize-path%2Fdownload%2Fnormalize-path-3.0.0.tgz}
+    resolution: {integrity: sha1-Dc1p/yOhybEf0JeDFmRKA4ghamU=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/normalize-path/download/normalize-path-3.0.0.tgz}
     name: normalize-path
     version: 3.0.0
     engines: {node: '>=0.10.0'}
@@ -2009,6 +2088,15 @@ packages:
     name: omit.js
     version: 2.0.2
     dev: false
+
+  registry.nlark.com/on-finished/2.3.0:
+    resolution: {integrity: sha1-IPEzZIGwg811M3mSoWlxqi2QaUc=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/on-finished/download/on-finished-2.3.0.tgz}
+    name: on-finished
+    version: 2.3.0
+    engines: {node: '>= 0.8'}
+    dependencies:
+      ee-first: registry.nlark.com/ee-first/1.1.1
+    dev: true
 
   registry.nlark.com/once/1.4.0:
     resolution: {integrity: sha1-WDsap3WWHUsROsF9nFC6753Xa9E=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/once/download/once-1.4.0.tgz}
@@ -2113,6 +2201,13 @@ packages:
     version: 6.0.1
     dev: true
 
+  registry.nlark.com/parseurl/1.3.3:
+    resolution: {integrity: sha1-naGee+6NEt/wUT7Vt2lXeTvC6NQ=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/parseurl/download/parseurl-1.3.3.tgz}
+    name: parseurl
+    version: 1.3.3
+    engines: {node: '>= 0.8'}
+    dev: true
+
   registry.nlark.com/pascal-case/3.1.2:
     resolution: {integrity: sha1-tI4O8rmOIF58Ha50fQsVCCN2YOs=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/pascal-case/download/pascal-case-3.1.2.tgz}
     name: pascal-case
@@ -2170,6 +2265,12 @@ packages:
     name: path-to-regexp
     version: 2.4.0
     dev: false
+
+  registry.nlark.com/path-to-regexp/6.2.0:
+    resolution: {integrity: sha1-97OAMzYQTDRoia3s5hRmkjBkXzg=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/path-to-regexp/download/path-to-regexp-6.2.0.tgz}
+    name: path-to-regexp
+    version: 6.2.0
+    dev: true
 
   registry.nlark.com/path-type/4.0.0:
     resolution: {integrity: sha1-hO0BwKe6OAr+CdkKjBgNzZ0DBDs=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/path-type/download/path-type-4.0.0.tgz}
@@ -2596,6 +2697,15 @@ packages:
       react-dom: registry.npmmirror.com/react-dom/17.0.2_react@17.0.2
     dev: false
 
+  registry.nlark.com/readdirp/3.6.0:
+    resolution: {integrity: sha1-dKNwvYVxFuJFspzJc0DNQxoCpsc=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/readdirp/download/readdirp-3.6.0.tgz}
+    name: readdirp
+    version: 3.6.0
+    engines: {node: '>=8.10.0'}
+    dependencies:
+      picomatch: registry.nlark.com/picomatch/2.3.0
+    dev: true
+
   registry.nlark.com/regenerator-runtime/0.13.9:
     resolution: {integrity: sha1-iSV0Kpj/2QgUmI11Zq0wyjsmO1I=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/regenerator-runtime/download/regenerator-runtime-0.13.9.tgz}
     name: regenerator-runtime
@@ -2846,6 +2956,13 @@ packages:
       escape-string-regexp: registry.nlark.com/escape-string-regexp/2.0.0
     dev: true
 
+  registry.nlark.com/statuses/1.5.0:
+    resolution: {integrity: sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/statuses/download/statuses-1.5.0.tgz}
+    name: statuses
+    version: 1.5.0
+    engines: {node: '>= 0.6'}
+    dev: true
+
   registry.nlark.com/string-convert/0.2.1:
     resolution: {integrity: sha1-aYLMMEn7tM2F+LJFaLnZvznu/5c=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/string-convert/download/string-convert-0.2.1.tgz}
     name: string-convert
@@ -3072,6 +3189,13 @@ packages:
     engines: {node: '>= 4.0.0'}
     dev: true
 
+  registry.nlark.com/unpipe/1.0.0:
+    resolution: {integrity: sha1-sr9O6FFKrmFltIF4KdIbLvSZBOw=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/unpipe/download/unpipe-1.0.0.tgz}
+    name: unpipe
+    version: 1.0.0
+    engines: {node: '>= 0.8'}
+    dev: true
+
   registry.nlark.com/unstated-next/1.1.0:
     resolution: {integrity: sha1-e7SRGhL988yK0+sRoLMV5KhoXqg=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/unstated-next/download/unstated-next-1.1.0.tgz}
     name: unstated-next
@@ -3124,10 +3248,42 @@ packages:
       react: registry.npmmirror.com/react/17.0.2
     dev: false
 
+  registry.nlark.com/utils-merge/1.0.1:
+    resolution: {integrity: sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/utils-merge/download/utils-merge-1.0.1.tgz}
+    name: utils-merge
+    version: 1.0.1
+    engines: {node: '>= 0.4.0'}
+    dev: true
+
   registry.nlark.com/v8-compile-cache/2.3.0:
     resolution: {integrity: sha1-LeGWGMZtwkfc+2+ZM4A12CRaLO4=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/v8-compile-cache/download/v8-compile-cache-2.3.0.tgz?cache=0&sync_timestamp=1631501921247&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fv8-compile-cache%2Fdownload%2Fv8-compile-cache-2.3.0.tgz}
     name: v8-compile-cache
     version: 2.3.0
+    dev: true
+
+  registry.nlark.com/vite-plugin-mock/2.9.6_vite@2.6.14:
+    resolution: {integrity: sha1-BN0j3muqBS+qW5rTF1FMkNYgXiU=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vite-plugin-mock/download/vite-plugin-mock-2.9.6.tgz}
+    id: registry.nlark.com/vite-plugin-mock/2.9.6
+    name: vite-plugin-mock
+    version: 2.9.6
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      mockjs: '>=1.1.0'
+      vite: '>=2.0.0'
+    dependencies:
+      '@rollup/plugin-node-resolve': registry.npmmirror.com/@rollup/plugin-node-resolve/13.0.6
+      '@types/mockjs': registry.npmmirror.com/@types/mockjs/1.0.4
+      chalk: registry.npmmirror.com/chalk/4.1.2
+      chokidar: registry.npmmirror.com/chokidar/3.5.2
+      connect: registry.npmmirror.com/connect/3.7.0
+      debug: registry.npmmirror.com/debug/4.3.2
+      esbuild: registry.npmmirror.com/esbuild/0.11.3
+      fast-glob: registry.nlark.com/fast-glob/3.2.7
+      path-to-regexp: registry.nlark.com/path-to-regexp/6.2.0
+      vite: registry.npmmirror.com/vite/2.6.14_less@4.1.2
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
     dev: true
 
   registry.nlark.com/w3c-hr-time/1.0.2:
@@ -3562,7 +3718,7 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/helper-validator-identifier': registry.nlark.com/@babel/helper-validator-identifier/7.15.7
-      chalk: registry.nlark.com/chalk/2.4.2
+      chalk: registry.npmmirror.com/chalk/2.4.2
       js-tokens: registry.nlark.com/js-tokens/4.0.0
     dev: true
 
@@ -3760,7 +3916,7 @@ packages:
     dependencies:
       '@jest/types': registry.npmmirror.com/@jest/types/27.2.5
       '@types/node': registry.npmmirror.com/@types/node/16.11.9
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       jest-message-util: registry.npmmirror.com/jest-message-util/27.3.1
       jest-util: registry.npmmirror.com/jest-util/27.3.1
       slash: registry.nlark.com/slash/3.0.0
@@ -3784,7 +3940,7 @@ packages:
       '@jest/types': registry.npmmirror.com/@jest/types/27.2.5
       '@types/node': registry.npmmirror.com/@types/node/16.11.9
       ansi-escapes: registry.nlark.com/ansi-escapes/4.3.2
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       emittery: registry.nlark.com/emittery/0.8.1
       exit: registry.nlark.com/exit/0.1.2
       graceful-fs: registry.npmmirror.com/graceful-fs/4.2.8
@@ -3867,7 +4023,7 @@ packages:
       '@jest/transform': registry.npmmirror.com/@jest/transform/27.3.1
       '@jest/types': registry.npmmirror.com/@jest/types/27.2.5
       '@types/node': registry.npmmirror.com/@types/node/16.11.9
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       collect-v8-coverage: registry.nlark.com/collect-v8-coverage/1.0.1
       exit: registry.nlark.com/exit/0.1.2
       glob: registry.npmmirror.com/glob/7.2.0
@@ -3925,7 +4081,7 @@ packages:
       '@babel/core': registry.npmmirror.com/@babel/core/7.16.0
       '@jest/types': registry.npmmirror.com/@jest/types/27.2.5
       babel-plugin-istanbul: registry.npmmirror.com/babel-plugin-istanbul/6.1.1
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       convert-source-map: registry.nlark.com/convert-source-map/1.8.0
       fast-json-stable-stringify: registry.nlark.com/fast-json-stable-stringify/2.1.0
       graceful-fs: registry.npmmirror.com/graceful-fs/4.2.8
@@ -3951,7 +4107,7 @@ packages:
       '@types/istanbul-reports': registry.npmmirror.com/@types/istanbul-reports/3.0.1
       '@types/node': registry.npmmirror.com/@types/node/16.11.9
       '@types/yargs': registry.npmmirror.com/@types/yargs/16.0.4
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
     dev: true
 
   registry.npmmirror.com/@loadable/component/5.15.0_react@17.0.2:
@@ -3991,6 +4147,22 @@ packages:
       '@rematch/core': registry.npmmirror.com/@rematch/core/2.2.0
       immer: registry.npmmirror.com/immer/9.0.7
     dev: false
+
+  registry.npmmirror.com/@rollup/plugin-node-resolve/13.0.6:
+    resolution: {integrity: sha1-KWKQcLt2dWe+gVf1dc+o8rjp73c=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@rollup/plugin-node-resolve/download/@rollup/plugin-node-resolve-13.0.6.tgz}
+    name: '@rollup/plugin-node-resolve'
+    version: 13.0.6
+    engines: {node: '>= 10.0.0'}
+    peerDependencies:
+      rollup: ^2.42.0
+    dependencies:
+      '@rollup/pluginutils': registry.nlark.com/@rollup/pluginutils/3.1.0
+      '@types/resolve': registry.npmmirror.com/@types/resolve/1.17.1
+      builtin-modules: registry.nlark.com/builtin-modules/3.2.0
+      deepmerge: registry.nlark.com/deepmerge/4.2.2
+      is-module: registry.nlark.com/is-module/1.0.0
+      resolve: registry.nlark.com/resolve/1.20.0
+    dev: true
 
   registry.npmmirror.com/@sinonjs/fake-timers/8.1.0:
     resolution: {integrity: sha1-P9wrbLWJNbIb+40WJesTAEhDFuc=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@sinonjs/fake-timers/download/@sinonjs/fake-timers-8.1.0.tgz?cache=0&sync_timestamp=1635959830812&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40sinonjs%2Ffake-timers%2Fdownload%2F%40sinonjs%2Ffake-timers-8.1.0.tgz}
@@ -4102,6 +4274,12 @@ packages:
     version: 4.14.177
     dev: true
 
+  registry.npmmirror.com/@types/mockjs/1.0.4:
+    resolution: {integrity: sha1-5waVHV4ztPCku3Ox+LEk4m8IHeA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/mockjs/download/@types/mockjs-1.0.4.tgz}
+    name: '@types/mockjs'
+    version: 1.0.4
+    dev: true
+
   registry.npmmirror.com/@types/node/16.11.9:
     resolution: {integrity: sha512-MKmdASMf3LtPzwLyRrFjtFFZ48cMf8jmX5VRYrDQiJa8Ybu5VAmkqBWqKU8fdCwD8ysw4mQ9nrEHvzg6gunR7A==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/node/download/@types/node-16.11.9.tgz}
     name: '@types/node'
@@ -4136,6 +4314,14 @@ packages:
       '@types/prop-types': registry.npmmirror.com/@types/prop-types/15.7.4
       '@types/scheduler': registry.npmmirror.com/@types/scheduler/0.16.2
       csstype: registry.npmmirror.com/csstype/3.0.10
+    dev: true
+
+  registry.npmmirror.com/@types/resolve/1.17.1:
+    resolution: {integrity: sha1-Ov1q2JZ8d+Q3bFmKgt3Vj0bsRdY=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/resolve/download/@types/resolve-1.17.1.tgz?cache=0&sync_timestamp=1637291454458&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40types%2Fresolve%2Fdownload%2F%40types%2Fresolve-1.17.1.tgz}
+    name: '@types/resolve'
+    version: 1.17.1
+    dependencies:
+      '@types/node': registry.npmmirror.com/@types/node/16.11.9
     dev: true
 
   registry.npmmirror.com/@types/scheduler/0.16.2:
@@ -4492,7 +4678,7 @@ packages:
       '@types/babel__core': registry.npmmirror.com/@types/babel__core/7.1.16
       babel-plugin-istanbul: registry.npmmirror.com/babel-plugin-istanbul/6.1.1
       babel-preset-jest: registry.nlark.com/babel-preset-jest/27.2.0_@babel+core@7.16.0
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       graceful-fs: registry.npmmirror.com/graceful-fs/4.2.8
       slash: registry.nlark.com/slash/3.0.0
     transitivePeerDependencies:
@@ -4548,10 +4734,60 @@ packages:
     version: 1.0.30001282
     dev: true
 
+  registry.npmmirror.com/chalk/2.4.2:
+    resolution: {integrity: sha1-zUJUFnelQzPPVBpJEIwUMrRMlCQ=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/chalk/download/chalk-2.4.2.tgz}
+    name: chalk
+    version: 2.4.2
+    engines: {node: '>=4'}
+    dependencies:
+      ansi-styles: registry.nlark.com/ansi-styles/3.2.1
+      escape-string-regexp: registry.nlark.com/escape-string-regexp/1.0.5
+      supports-color: registry.npmmirror.com/supports-color/5.5.0
+    dev: true
+
+  registry.npmmirror.com/chalk/4.1.2:
+    resolution: {integrity: sha1-qsTit3NKdAhnrrFr8CqtVWoeegE=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/chalk/download/chalk-4.1.2.tgz}
+    name: chalk
+    version: 4.1.2
+    engines: {node: '>=10'}
+    dependencies:
+      ansi-styles: registry.nlark.com/ansi-styles/4.3.0
+      supports-color: registry.npmmirror.com/supports-color/7.2.0
+    dev: true
+
+  registry.npmmirror.com/chokidar/3.5.2:
+    resolution: {integrity: sha1-26OXb8rbAW9m/TZQIdkWANAcHnU=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/chokidar/download/chokidar-3.5.2.tgz}
+    name: chokidar
+    version: 3.5.2
+    engines: {node: '>= 8.10.0'}
+    dependencies:
+      anymatch: registry.nlark.com/anymatch/3.1.2
+      braces: registry.nlark.com/braces/3.0.2
+      glob-parent: registry.npmmirror.com/glob-parent/5.1.2
+      is-binary-path: registry.nlark.com/is-binary-path/2.1.0
+      is-glob: registry.npmmirror.com/is-glob/4.0.3
+      normalize-path: registry.nlark.com/normalize-path/3.0.0
+      readdirp: registry.nlark.com/readdirp/3.6.0
+    optionalDependencies:
+      fsevents: registry.npmmirror.com/fsevents/2.3.2
+    dev: true
+
   registry.npmmirror.com/confusing-browser-globals/1.0.10:
     resolution: {integrity: sha1-MNHn89G4grJexJM9HRraw1PSClk=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/confusing-browser-globals/download/confusing-browser-globals-1.0.10.tgz}
     name: confusing-browser-globals
     version: 1.0.10
+    dev: true
+
+  registry.npmmirror.com/connect/3.7.0:
+    resolution: {integrity: sha1-XUk0iRDKpeB6AYALAw0MNfIEhPg=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/connect/download/connect-3.7.0.tgz}
+    name: connect
+    version: 3.7.0
+    engines: {node: '>= 0.10.0'}
+    dependencies:
+      debug: registry.npmmirror.com/debug/2.6.9
+      finalhandler: registry.nlark.com/finalhandler/1.1.2
+      parseurl: registry.nlark.com/parseurl/1.3.3
+      utils-merge: registry.nlark.com/utils-merge/1.0.1
     dev: true
 
   registry.npmmirror.com/core-js-pure/3.19.1:
@@ -4858,6 +5094,14 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  registry.npmmirror.com/esbuild/0.11.3:
+    resolution: {integrity: sha1-tXFluQe+T/umUfZFBTjOjYwdXrA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/esbuild/download/esbuild-0.11.3.tgz?cache=0&sync_timestamp=1637048562619&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fesbuild%2Fdownload%2Fesbuild-0.11.3.tgz}
+    name: esbuild
+    version: 0.11.3
+    hasBin: true
+    requiresBuild: true
+    dev: true
 
   registry.npmmirror.com/esbuild/0.13.14:
     resolution: {integrity: sha512-xu4D+1ji9x53ocuomcY+KOrwAnWzhBu/wTEjpdgZ8I1c8i5vboYIeigMdzgY1UowYBKa2vZgVgUB32bu7gkxeg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/esbuild/download/esbuild-0.13.14.tgz}
@@ -5500,7 +5744,7 @@ packages:
       '@jest/test-result': registry.npmmirror.com/@jest/test-result/27.3.1
       '@jest/types': registry.npmmirror.com/@jest/types/27.2.5
       '@types/node': registry.npmmirror.com/@types/node/16.11.9
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       co: registry.nlark.com/co/4.6.0
       dedent: registry.nlark.com/dedent/0.7.0
       expect: registry.npmmirror.com/expect/27.3.1
@@ -5534,7 +5778,7 @@ packages:
       '@jest/core': registry.npmmirror.com/@jest/core/27.3.1
       '@jest/test-result': registry.npmmirror.com/@jest/test-result/27.3.1
       '@jest/types': registry.npmmirror.com/@jest/types/27.2.5
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       exit: registry.nlark.com/exit/0.1.2
       graceful-fs: registry.npmmirror.com/graceful-fs/4.2.8
       import-local: registry.npmmirror.com/import-local/3.0.3
@@ -5566,7 +5810,7 @@ packages:
       '@jest/test-sequencer': registry.npmmirror.com/@jest/test-sequencer/27.3.1
       '@jest/types': registry.npmmirror.com/@jest/types/27.2.5
       babel-jest: registry.npmmirror.com/babel-jest/27.3.1_@babel+core@7.16.0
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       ci-info: registry.nlark.com/ci-info/3.2.0
       deepmerge: registry.nlark.com/deepmerge/4.2.2
       glob: registry.npmmirror.com/glob/7.2.0
@@ -5596,7 +5840,7 @@ packages:
     version: 27.3.1
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       diff-sequences: registry.nlark.com/diff-sequences/27.0.6
       jest-get-type: registry.npmmirror.com/jest-get-type/27.3.1
       pretty-format: registry.npmmirror.com/pretty-format/27.3.1
@@ -5609,7 +5853,7 @@ packages:
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
       '@jest/types': registry.npmmirror.com/@jest/types/27.2.5
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       jest-get-type: registry.npmmirror.com/jest-get-type/27.3.1
       jest-util: registry.npmmirror.com/jest-util/27.3.1
       pretty-format: registry.npmmirror.com/pretty-format/27.3.1
@@ -5690,7 +5934,7 @@ packages:
       '@jest/test-result': registry.npmmirror.com/@jest/test-result/27.3.1
       '@jest/types': registry.npmmirror.com/@jest/types/27.2.5
       '@types/node': registry.npmmirror.com/@types/node/16.11.9
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       co: registry.nlark.com/co/4.6.0
       expect: registry.npmmirror.com/expect/27.3.1
       is-generator-fn: registry.nlark.com/is-generator-fn/2.1.0
@@ -5722,7 +5966,7 @@ packages:
     version: 27.3.1
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       jest-diff: registry.npmmirror.com/jest-diff/27.3.1
       jest-get-type: registry.npmmirror.com/jest-get-type/27.3.1
       pretty-format: registry.npmmirror.com/pretty-format/27.3.1
@@ -5737,7 +5981,7 @@ packages:
       '@babel/code-frame': registry.npmmirror.com/@babel/code-frame/7.16.0
       '@jest/types': registry.npmmirror.com/@jest/types/27.2.5
       '@types/stack-utils': registry.nlark.com/@types/stack-utils/2.0.1
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       graceful-fs: registry.npmmirror.com/graceful-fs/4.2.8
       micromatch: registry.nlark.com/micromatch/4.0.4
       pretty-format: registry.npmmirror.com/pretty-format/27.3.1
@@ -5790,7 +6034,7 @@ packages:
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
       '@jest/types': registry.npmmirror.com/@jest/types/27.2.5
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       graceful-fs: registry.npmmirror.com/graceful-fs/4.2.8
       jest-haste-map: registry.npmmirror.com/jest-haste-map/27.3.1
       jest-pnp-resolver: registry.npmmirror.com/jest-pnp-resolver/1.2.2_jest-resolve@27.3.1
@@ -5813,7 +6057,7 @@ packages:
       '@jest/transform': registry.npmmirror.com/@jest/transform/27.3.1
       '@jest/types': registry.npmmirror.com/@jest/types/27.2.5
       '@types/node': registry.npmmirror.com/@types/node/16.11.9
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       emittery: registry.nlark.com/emittery/0.8.1
       exit: registry.nlark.com/exit/0.1.2
       graceful-fs: registry.npmmirror.com/graceful-fs/4.2.8
@@ -5850,7 +6094,7 @@ packages:
       '@jest/transform': registry.npmmirror.com/@jest/transform/27.3.1
       '@jest/types': registry.npmmirror.com/@jest/types/27.2.5
       '@types/yargs': registry.npmmirror.com/@types/yargs/16.0.4
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       cjs-module-lexer: registry.nlark.com/cjs-module-lexer/1.2.2
       collect-v8-coverage: registry.nlark.com/collect-v8-coverage/1.0.1
       execa: registry.npmmirror.com/execa/5.1.1
@@ -5889,7 +6133,7 @@ packages:
       '@types/babel__traverse': registry.npmmirror.com/@types/babel__traverse/7.14.2
       '@types/prettier': registry.npmmirror.com/@types/prettier/2.4.2
       babel-preset-current-node-syntax: registry.nlark.com/babel-preset-current-node-syntax/1.0.1_@babel+core@7.16.0
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       expect: registry.npmmirror.com/expect/27.3.1
       graceful-fs: registry.npmmirror.com/graceful-fs/4.2.8
       jest-diff: registry.npmmirror.com/jest-diff/27.3.1
@@ -5914,7 +6158,7 @@ packages:
     dependencies:
       '@jest/types': registry.npmmirror.com/@jest/types/27.2.5
       '@types/node': registry.npmmirror.com/@types/node/16.11.9
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       ci-info: registry.nlark.com/ci-info/3.2.0
       graceful-fs: registry.npmmirror.com/graceful-fs/4.2.8
       picomatch: registry.nlark.com/picomatch/2.3.0
@@ -5928,7 +6172,7 @@ packages:
     dependencies:
       '@jest/types': registry.npmmirror.com/@jest/types/27.2.5
       camelcase: registry.npmmirror.com/camelcase/6.2.1
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       jest-get-type: registry.npmmirror.com/jest-get-type/27.3.1
       leven: registry.nlark.com/leven/3.1.0
       pretty-format: registry.npmmirror.com/pretty-format/27.3.1
@@ -5944,7 +6188,7 @@ packages:
       '@jest/types': registry.npmmirror.com/@jest/types/27.2.5
       '@types/node': registry.npmmirror.com/@types/node/16.11.9
       ansi-escapes: registry.nlark.com/ansi-escapes/4.3.2
-      chalk: registry.nlark.com/chalk/4.1.2
+      chalk: registry.npmmirror.com/chalk/4.1.2
       jest-util: registry.npmmirror.com/jest-util/27.3.1
       string-length: registry.nlark.com/string-length/4.0.2
     dev: true
@@ -6102,13 +6346,13 @@ packages:
     dev: false
 
   registry.npmmirror.com/ms/2.0.0:
-    resolution: {integrity: sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ms/download/ms-2.0.0.tgz?cache=0&sync_timestamp=1632788710719&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fms%2Fdownload%2Fms-2.0.0.tgz}
+    resolution: {integrity: sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ms/download/ms-2.0.0.tgz}
     name: ms
     version: 2.0.0
     dev: true
 
   registry.npmmirror.com/ms/2.1.2:
-    resolution: {integrity: sha1-0J0fNXtEP0kzgqjrPM0YOHKuYAk=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ms/download/ms-2.1.2.tgz?cache=0&sync_timestamp=1632788710719&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fms%2Fdownload%2Fms-2.1.2.tgz}
+    resolution: {integrity: sha1-0J0fNXtEP0kzgqjrPM0YOHKuYAk=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ms/download/ms-2.1.2.tgz}
     name: ms
     version: 2.1.2
     dev: true
