@@ -1,4 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
+import { getThemeVariables } from 'antd/dist/theme';
 import merge from 'deepmerge';
 import { ConfigEnv, UserConfig } from 'vite';
 
@@ -26,16 +27,16 @@ export const getConfig = (params: ConfigEnv, configure?: Configure): UserConfig 
                 preprocessorOptions: {
                     less: {
                         javascriptEnabled: true,
-                        modifyVars: { '@primary-color': '#1DA57A' },
+                        modifyVars: { ...getThemeVariables(), '@primary-color': '#1DA57A' },
                     },
                 },
             },
             plugins: getPlugins(isBuild),
             server: {
                 host: true,
-                port: 4000,
+                port: 3100,
                 proxy: createProxy([
-                    ['/basic-api', 'http://localhost:3000'],
+                    ['/api', 'http://localhost:3000'],
                     ['/upload', 'http://localhost:3300/upload'],
                 ]),
             },

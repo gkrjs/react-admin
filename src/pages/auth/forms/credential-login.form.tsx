@@ -1,6 +1,14 @@
 import ProForm, { ProFormText } from '@ant-design/pro-form';
+
 import { message } from 'antd';
-import type { FC } from 'react';
+
+import { FC, useEffect, useState } from 'react';
+
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+
+import { useAuth } from '@/components/Auth/hooks';
+import { useLocationPath } from '@/components/Router';
+import { useRequest } from '@/utils/request/hooks';
 
 const waitTime = (time = 100) => {
     return new Promise((resolve) => {
@@ -11,13 +19,43 @@ const waitTime = (time = 100) => {
 };
 
 const CredentialLoginForm: FC = () => {
+    const { clearToken, setToken } = useAuth();
+    const request = useRequest(false);
+    const { search } = useLocation();
+    const { basePath } = useLocationPath();
+    const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
+    const [redirect, setRedirect] = useState(basePath);
+    useEffect(() => {
+        let queryRedirect = searchParams.get('redirect');
+        if (queryRedirect && queryRedirect.length > 0) {
+            searchParams.forEach((v, k) => {
+                if (k !== 'redirect') queryRedirect = `${queryRedirect}&${k}=${v}`;
+            });
+            setRedirect(queryRedirect);
+        } else {
+            setRedirect(basePath);
+        }
+    }, [search]);
+
     return (
         <div className="p-4 w-full">
             <ProForm
                 className="enter-x"
-                onFinish={async () => {
-                    await waitTime(2000);
-                    message.success('提交成功');
+                onFinish={async (values) => {
+                    await clearToken();
+                    try {
+                        const {
+                            data: { token },
+                        } = await request.post('/user/auth/login', values);
+                        if (token) await setToken(token);
+                        message.success('登录成功');
+                        console.log(redirect);
+                        waitTime();
+                        navigate(redirect, { replace: true });
+                    } catch (err) {
+                        message.error('用户名或密码错误');
+                    }
                 }}
                 submitter={{
                     searchConfig: {
@@ -45,7 +83,6 @@ const CredentialLoginForm: FC = () => {
                             message: '请输入手机号!',
                         },
                         {
-                            pattern: /^1\d{10}$/,
                             message: '不合法的手机号格式!',
                         },
                     ]}

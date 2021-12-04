@@ -61,10 +61,7 @@ interface IConfig<T extends DbConfig> {
 
 export interface StorageConfig extends IConfig<DbConfig> {}
 export interface StorageState extends Required<IConfig<DbItem<TableItem>>> {}
-export interface StorageContextType {
-    state: StorageState;
-    dispatch: Dispatch<DbAction>;
-}
+export interface StorageDispatch extends Dispatch<DbAction> {}
 export type DbAction =
     | { type: DbActionType.ADD_DB; config: DbConfig }
     | { type: DbActionType.SET_DEFAULT_DB; name: string }

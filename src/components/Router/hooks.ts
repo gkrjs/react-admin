@@ -1,3 +1,4 @@
+import { useCreation } from 'ahooks';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -7,9 +8,9 @@ export const useAppRouter = () => {
     const { basePath, routes, menus, names, setConfig } = useContext(RouterContext);
     return {
         basePath: useMemo(() => basePath, [basePath]),
-        routes: useMemo(() => routes, [routes]),
-        menus: useMemo(() => menus, [menus]),
-        names: useMemo(() => names, [names]),
+        routes: useCreation(() => routes, [routes]),
+        menus: useCreation(() => menus, [menus]),
+        names: useCreation(() => names, [names]),
         setConfig: useCallback(setConfig, [setConfig]),
     };
 };

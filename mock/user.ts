@@ -53,7 +53,7 @@ export default [
         url: '/api/user/auth/login',
         timeout: 200,
         method: 'post',
-        response: ({ body }) => {
+        response({ body }) {
             const { credential, password } = body;
             const checkUser = createFakeUserList().find(
                 (item) =>
@@ -61,18 +61,11 @@ export default [
                     password === item.password,
             );
             if (!checkUser) {
+                this.res.statusCode = 401;
                 return resultError('Incorrect account or password！');
             }
-            const { id, username, email, token, nickname, desc, roles } = checkUser;
-            return resultSuccess({
-                roles,
-                id,
-                username,
-                email,
-                nickname,
-                token,
-                desc,
-            });
+            const { token } = checkUser;
+            return { token };
         },
     },
     {

@@ -41,7 +41,11 @@ const createDb = produce<DbItem<TableConfig>>((db) => {
  * @param        {*} produce
  * @return       {*}
  */
-export const initStorage = produce<StorageConfig>((state) => {
+export const initStorage = produce<StorageConfig>((draft) => fixStorage(draft)) as (
+    state?: StorageConfig,
+) => StorageState;
+
+export const fixStorage = (state: StorageConfig) => {
     if (!state.dbs) {
         state.dbs = [
             {
@@ -58,8 +62,7 @@ export const initStorage = produce<StorageConfig>((state) => {
             return { ...d, defaultTable, tables };
         })
         .map((d) => createDb(d));
-    return state;
-}) as (state?: StorageConfig) => StorageState;
+};
 /**
  * @description 获取数据库配置
  * @param        {StorageState} state
@@ -83,6 +86,7 @@ const getTable = (state: StorageState, dbname: string, name: string) => {
  * @param        {*} produce
  * @return       {*}
  */
+<<<<<<< HEAD
 export const storageReducer: Reducer<StorageState | undefined, DbAction> = produce(
     (draft, action) => {
         if (draft) {
@@ -122,6 +126,39 @@ export const storageReducer: Reducer<StorageState | undefined, DbAction> = produ
                         }
                     });
                     break;
+=======
+export const storageReducer: Reducer<StorageState, DbAction> = produce((draft, action) => {
+    switch (action.type) {
+        case DbActionType.ADD_DB:
+            if (!getDb(draft, action.config.name)) {
+                draft.dbs = [...draft.dbs, action.config as DbItem<TableItem>];
+                fixStorage(draft);
+            }
+            break;
+        case DbActionType.SET_DEFAULT_DB:
+            if (draft.default !== action.name && getDb(draft, action.name))
+                draft.default = action.name;
+            break;
+        case DbActionType.DELETE_DB:
+            draft.dbs = draft.dbs.filter((d) => d.name === action.name);
+            fixStorage(draft);
+            break;
+        case DbActionType.ADD_TABLE: {
+            const dbname = action.dbname ?? draft.default;
+            draft.dbs.forEach((db, index) => {
+                if (db.name === dbname && !getTable(draft, dbname, action.config.name)) {
+                    draft.dbs[index].tables.push(action.config as TableItem);
+                }
+            });
+            fixStorage(draft);
+            break;
+        }
+        case DbActionType.SET_DEFAULT_TABLE: {
+            const dbname = action.dbname ?? draft.default;
+            draft.dbs.forEach((db, index) => {
+                if (db.defaultTable !== action.name && getTable(draft, dbname, action.name)) {
+                    draft.dbs[index].defaultTable = action.name;
+>>>>>>> 1ff6298ec41ef41865b28009e2e7518b1bc99383
                 }
                 case DbActionType.DELETE_TABLE: {
                     const dbname = action.dbname ?? draft.default;
@@ -135,6 +172,7 @@ export const storageReducer: Reducer<StorageState | undefined, DbAction> = produ
                     initStorage(draft);
                     break;
                 }
+<<<<<<< HEAD
                 default:
                     initStorage(draft);
                     break;
@@ -142,3 +180,14 @@ export const storageReducer: Reducer<StorageState | undefined, DbAction> = produ
         }
     },
 );
+=======
+            });
+            fixStorage(draft);
+            break;
+        }
+        default:
+            fixStorage(draft);
+            break;
+    }
+});
+>>>>>>> 1ff6298ec41ef41865b28009e2e7518b1bc99383

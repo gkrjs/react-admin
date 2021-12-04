@@ -136,7 +136,7 @@ export const getRoutes = <M extends Record<string, any> | null>(
                 element = <Outlet />;
             }
             if (current.render) {
-                route.element = current.render(item, element as ReactElement);
+                route.element = current.render(current.basePath, item, element as ReactElement);
             } else {
                 route.element = element;
             }

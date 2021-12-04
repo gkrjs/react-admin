@@ -1,6 +1,6 @@
 import { FC, useContext, useReducer } from 'react';
 
-import { StorageConfigContext, StorageStateContext } from './hooks';
+import { StorageConfigContext, StorageDispatchContext, StorageStateContext } from './hooks';
 import type { StorageConfig } from './types';
 import { storageReducer, initStorage } from './utils';
 
@@ -9,8 +9,10 @@ const StateProvider: FC = ({ children }) => {
     const [state, dispatch] = useReducer(storageReducer, config, initStorage);
     return (
         // eslint-disable-next-line react/jsx-no-constructed-context-values
-        <StorageStateContext.Provider value={{ state, dispatch }}>
-            {children}
+        <StorageStateContext.Provider value={state}>
+            <StorageDispatchContext.Provider value={dispatch}>
+                {children}
+            </StorageDispatchContext.Provider>
         </StorageStateContext.Provider>
     );
 };
