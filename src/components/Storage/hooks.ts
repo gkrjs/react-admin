@@ -75,33 +75,6 @@ export const useRemoveTable = () => {
     }, []);
 };
 export const useStorage = () => {
-<<<<<<< HEAD
-    const context = useContext(StorageStateContext);
-    const state = context?.state as StorageState;
-    const getDb = useGetDb();
-    const deleteDb = useDeleteDb();
-    const getStore = useGetStore();
-    const getTable = useGetTable();
-    const deleteTable = useDeleteTable();
-    const dispatch = context?.dispatch;
-    const addDb = (options: DbConfig) =>
-        dispatch && dispatch({ type: DbActionType.ADD_DB, config: options });
-    const setDefaultDb = (name: string) =>
-        dispatch && dispatch({ type: DbActionType.SET_DEFAULT_DB, name });
-    const addTable = (options: TableConfig, dbname?: string) =>
-        dispatch && dispatch({ type: DbActionType.ADD_TABLE, config: options, dbname });
-    return {
-        storeState: state,
-        addDb,
-        setDefaultDb,
-        deleteDb,
-        getDb,
-        addTable,
-        getTable,
-        deleteTable,
-        getStore,
-    };
-=======
     const state = useContext(StorageStateContext);
     const getTable = useTable();
     return useCallback((tablename?: string, dbname?: string) => {
@@ -113,5 +86,4 @@ export const useStorage = () => {
 export const useStorageState = () => {
     const state = useContext(StorageStateContext);
     return useCreation(() => state, [state]);
->>>>>>> 1ff6298ec41ef41865b28009e2e7518b1bc99383
 };
