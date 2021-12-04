@@ -1,48 +1,44 @@
+import { useAsyncEffect } from 'ahooks';
 import produce from 'immer';
-import { useEffect } from 'react';
+import { useCallback, useMemo } from 'react';
+
 import create from 'zustand';
-import shallow from 'zustand/shallow';
 
-import { useStorage } from '../Storage';
+import { useStorage, useAddTable } from '../Storage';
 
-const useAuthStore = create<{ token: null | string }>((set) => ({
-    token: null,
-}));
+const useAuthStore = create<{ token?: null | string }>(() => ({}));
 
 export const useAuth = () => {
-    const { storeState, addTable, getStore } = useStorage();
-    const auth = useAuthStore((state) => state, shallow);
-    useEffect(() => {
+    const addTable = useAddTable();
+    const getStorage = useStorage();
+    const { token } = useAuthStore((state) => state);
+    useAsyncEffect(async () => {
         addTable({ name: 'auth' });
+        const storage = getStorage('auth');
+        if (storage) {
+            const storgeToken = await storage.getItem<string | null>('token');
+            if (!storgeToken) await clearToken();
+            else await setToken(storgeToken);
+        }
     }, []);
-    useEffect(() => {
-        (async () => {
-            const store = getStore('auth');
-            if (store) {
-                const storgeToken = await store.getItem<string | null>('token');
-                if (!storgeToken) clearToken();
-                else setToken(storgeToken);
-            }
-        })();
-    }, [storeState]);
-    useEffect(() => {
-        (async () => {
-            const store = getStore('auth');
-            if (store) await store.setItem('token', auth.token);
-        })();
-    }, [auth.token]);
-    const setToken = async (token: string) => {
+    const setToken = useCallback(async (value: string) => {
+        const storage = getStorage('auth');
+        if (storage) await storage.setItem('token', value);
         return useAuthStore.setState(
             produce((draft) => {
-                draft.token = token;
+                draft.token = value;
             }),
         );
-    };
-    const clearToken = () =>
+    }, []);
+    const clearToken = useCallback(async () => {
+        const storage = getStorage('auth');
+        if (storage) await storage.setItem('token', null);
         useAuthStore.setState(
             produce((draft) => {
                 draft.token = null;
             }),
         );
-    return { ...auth, setToken, clearToken };
+    }, []);
+
+    return { token: useMemo(() => token, [token]), setToken, clearToken };
 };

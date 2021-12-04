@@ -1,32 +1,33 @@
+import { useCreation } from 'ahooks';
 import { dropInstance } from 'localforage';
-import { createContext, useContext } from 'react';
+import { createContext, useCallback, useContext } from 'react';
 
 import { DbActionType } from './constants';
 
-import type {
-    DbConfig,
-    StorageConfig,
-    StorageContextType,
-    StorageState,
-    TableConfig,
-} from './types';
+import type { DbConfig, StorageConfig, StorageDispatch, StorageState, TableConfig } from './types';
 
 export const StorageConfigContext = createContext<StorageConfig>({});
-export const StorageStateContext = createContext<StorageContextType | null>(null);
-const useGetDb = () => {
-    const context = useContext(StorageStateContext);
-    return (name?: string) => {
-        const state = context?.state;
+export const StorageStateContext = createContext<StorageState | null>(null);
+export const StorageDispatchContext = createContext<StorageDispatch | null>(null);
+export const useDb = () => {
+    const state = useContext(StorageStateContext);
+    return useCallback((name?: string) => {
         if (!state) return undefined;
         const dbname = name ?? state.default;
         return state.dbs.find((db) => db.name === dbname);
-    };
+    }, []);
 };
-const useDeleteDb = () => {
-    const context = useContext(StorageStateContext);
-    const getDb = useGetDb();
-    return async (name: string) => {
-        const dispatch = context?.dispatch;
+export const useAddDb = () => {
+    const dispatch = useContext(StorageDispatchContext);
+    useCallback(
+        (options: DbConfig) => dispatch && dispatch({ type: DbActionType.ADD_DB, config: options }),
+        [],
+    );
+};
+export const useRemoveDb = () => {
+    const dispatch = useContext(StorageDispatchContext);
+    const getDb = useDb();
+    return useCallback(async (name: string) => {
         if (dispatch) {
             const db = getDb(name);
             if (db) {
@@ -36,12 +37,11 @@ const useDeleteDb = () => {
             }
             dispatch({ type: DbActionType.DELETE_DB, name });
         }
-    };
+    }, []);
 };
-const useGetTable = () => {
-    const context = useContext(StorageStateContext);
-    return (name?: string, dbname?: string) => {
-        const state = context?.state;
+export const useTable = () => {
+    const state = useContext(StorageStateContext);
+    return useCallback((name?: string, dbname?: string) => {
         if (!state) return undefined;
         const dname = dbname ?? state.default;
         const db = state.dbs.find((d) => d.name === dname);
@@ -52,57 +52,38 @@ const useGetTable = () => {
                 return t.name === tname;
             })
         );
-    };
+    }, []);
 };
-const useGetStore = () => {
-    const context = useContext(StorageStateContext);
-    const getTable = useGetTable();
-    return (tablename?: string, dbname?: string) => {
-        if (!context?.state) return undefined;
-        const table = getTable(tablename, dbname);
-        return table && table.instance;
-    };
+export const useAddTable = () => {
+    const dispatch = useContext(StorageDispatchContext);
+    return useCallback((options: TableConfig, dbname?: string) => {
+        if (dispatch) {
+            dispatch({ type: DbActionType.ADD_TABLE, config: options, dbname });
+        }
+    }, []);
 };
-const useDeleteTable = () => {
-    const context = useContext(StorageStateContext);
-    const getTable = useGetTable();
-    return async (name: string, dbname?: string) => {
-        const state = context?.state;
-        const dispatch = context?.dispatch;
+export const useRemoveTable = () => {
+    const state = useContext(StorageStateContext);
+    const dispatch = useContext(StorageDispatchContext);
+    const getTable = useTable();
+    return useCallback(async (name: string, dbname?: string) => {
         if (state && dispatch) {
             const dname = dbname ?? state.default;
             dispatch({ type: DbActionType.DELETE_TABLE, name, dbname: dname });
             if (getTable(name, dbname)) await dropInstance({ name: dname, storeName: name });
         }
-    };
+    }, []);
 };
 export const useStorage = () => {
-    const context = useContext(StorageStateContext);
-    const state = context?.state as StorageState;
-    if (!state) {
-        throw new Error('Storage not be configed,please use <Storage> wrapper your component!');
-    }
-    const getDb = useGetDb();
-    const deleteDb = useDeleteDb();
-    const getStore = useGetStore();
-    const getTable = useGetTable();
-    const deleteTable = useDeleteTable();
-    const dispatch = context?.dispatch;
-    const addDb = (options: DbConfig) =>
-        dispatch && dispatch({ type: DbActionType.ADD_DB, config: options });
-    const setDefaultDb = (name: string) =>
-        dispatch && dispatch({ type: DbActionType.SET_DEFAULT_DB, name });
-    const addTable = (options: TableConfig, dbname?: string) =>
-        dispatch && dispatch({ type: DbActionType.ADD_TABLE, config: options, dbname });
-    return {
-        storeState: state,
-        addDb,
-        setDefaultDb,
-        deleteDb,
-        getDb,
-        addTable,
-        getTable,
-        deleteTable,
-        getStore,
-    };
+    const state = useContext(StorageStateContext);
+    const getTable = useTable();
+    return useCallback((tablename?: string, dbname?: string) => {
+        if (!state) return undefined;
+        const table = getTable(tablename, dbname);
+        return table && table.instance;
+    }, []);
+};
+export const useStorageState = () => {
+    const state = useContext(StorageStateContext);
+    return useCreation(() => state, [state]);
 };

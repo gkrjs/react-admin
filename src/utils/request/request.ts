@@ -36,7 +36,10 @@ function removePending(config: AxiosRequestConfig, maps: Map<string, any>) {
     return nmaps;
 }
 
-export const createRequest: (config?: RequestConfig) => AxiosInstance = (config) => {
+export const createRequest: (config?: RequestConfig, token?: string | null) => AxiosInstance = (
+    config,
+    token,
+) => {
     let pendingMap = new Map();
     const options: RequestConfig = {
         baseURL: '/api/',
@@ -50,8 +53,8 @@ export const createRequest: (config?: RequestConfig) => AxiosInstance = (config)
             if (params.cancel_repeat) {
                 pendingMap = addPending(params, pendingMap);
             }
-            if (options.auth_token && typeof window !== 'undefined') {
-                options.headers = { ...(options.headers ?? {}), Authorization: options.auth_token };
+            if (token && typeof window !== 'undefined') {
+                options.headers = { ...(options.headers ?? {}), Authorization: token };
             }
             return params;
         },

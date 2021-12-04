@@ -41,7 +41,11 @@ const createDb = produce<DbItem<TableConfig>>((db) => {
  * @param        {*} produce
  * @return       {*}
  */
-export const initStorage = produce<StorageConfig>((state) => {
+export const initStorage = produce<StorageConfig>((draft) => fixStorage(draft)) as (
+    state?: StorageConfig,
+) => StorageState;
+
+export const fixStorage = (state: StorageConfig) => {
     if (!state.dbs) {
         state.dbs = [
             {
@@ -58,8 +62,7 @@ export const initStorage = produce<StorageConfig>((state) => {
             return { ...d, defaultTable, tables };
         })
         .map((d) => createDb(d));
-    return state;
-}) as (state?: StorageConfig) => StorageState;
+};
 /**
  * @description 获取数据库配置
  * @param        {StorageState} state
@@ -88,7 +91,7 @@ export const storageReducer: Reducer<StorageState, DbAction> = produce((draft, a
         case DbActionType.ADD_DB:
             if (!getDb(draft, action.config.name)) {
                 draft.dbs = [...draft.dbs, action.config as DbItem<TableItem>];
-                initStorage(draft);
+                fixStorage(draft);
             }
             break;
         case DbActionType.SET_DEFAULT_DB:
@@ -97,7 +100,7 @@ export const storageReducer: Reducer<StorageState, DbAction> = produce((draft, a
             break;
         case DbActionType.DELETE_DB:
             draft.dbs = draft.dbs.filter((d) => d.name === action.name);
-            initStorage(draft);
+            fixStorage(draft);
             break;
         case DbActionType.ADD_TABLE: {
             const dbname = action.dbname ?? draft.default;
@@ -106,7 +109,7 @@ export const storageReducer: Reducer<StorageState, DbAction> = produce((draft, a
                     draft.dbs[index].tables.push(action.config as TableItem);
                 }
             });
-            initStorage(draft);
+            fixStorage(draft);
             break;
         }
         case DbActionType.SET_DEFAULT_TABLE: {
@@ -125,11 +128,11 @@ export const storageReducer: Reducer<StorageState, DbAction> = produce((draft, a
                     draft.dbs[index].tables = db.tables.filter((t) => t.name !== action.name);
                 }
             });
-            initStorage(draft);
+            fixStorage(draft);
             break;
         }
         default:
-            initStorage(draft);
+            fixStorage(draft);
             break;
     }
 });

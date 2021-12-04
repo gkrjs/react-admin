@@ -7,6 +7,8 @@ export const router: RouterConfig = {
     basename: import.meta.env.BASE_URL,
     window: undefined,
     hash: false,
-    render: (route, element) => <RequirdAuth route={route} element={element} path="/auth/login" />,
+    render: (basename, route, element) => (
+        <RequirdAuth basename={basename} route={route} element={element} path="/auth/login" />
+    ),
     routes,
 };

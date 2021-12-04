@@ -41,6 +41,7 @@ export const AppRouter: FC<{ config: RouterConfig | AntdRouterConfig }> = (props
         nameMaps: names,
     } = getRoutes(config.routes ?? [], {
         basePath,
+        render: config.render,
     });
     return (
         // eslint-disable-next-line react/jsx-no-constructed-context-values
