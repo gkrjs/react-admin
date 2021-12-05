@@ -34,12 +34,20 @@ export type RouteOption<M extends Record<string, any> | null = null> = (
 };
 export interface RouterConfig<M extends Record<string, any> | null = null> {
     basePath?: string;
-    render?: (basename: string, route: RouteOption, element: ReactElement) => ReactNode;
+    render?: (basename: string, route: RouteOption<M>, element: ReactElement) => ReactNode;
     hash?: boolean;
     access_fields?: { permission?: string; role?: string };
     routes?: RouteOption<M>[];
 }
 export interface RouterState extends Omit<BrowserRouterProps, 'children'> {
+    maps?: [];
     hash?: boolean;
     routes?: RouteObject[];
+}
+
+export interface ParentRouteProps<M extends Record<string, any> | null = null> {
+    basePath: string;
+    render?: (basename: string, route: RouteOption<M>, element: ReactElement) => ReactNode;
+    index?: string;
+    path?: string;
 }
