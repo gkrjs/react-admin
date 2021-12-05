@@ -6,7 +6,7 @@ import { FC, useEffect, useState } from 'react';
 
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { useAuth } from '@/components/Auth/hooks';
+import { useAuth } from '@/components/Auth/auth';
 import { useLocationPath } from '@/components/Router';
 import { useRequest } from '@/utils/request/hooks';
 

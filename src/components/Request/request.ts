@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AxiosRequestConfig, AxiosInstance } from 'axios';
+import type { AxiosResponse, AxiosRequestConfig, AxiosInstance } from 'axios';
 
 import produce from 'immer';
 
@@ -36,10 +36,19 @@ function removePending(config: AxiosRequestConfig, maps: Map<string, any>) {
     return nmaps;
 }
 
-export const createRequest: (config?: RequestConfig, token?: string | null) => AxiosInstance = (
-    config,
-    token,
-) => {
+export const createRequest: (
+    config?: RequestConfig,
+    token?: string | null,
+    fetched?: {
+        success?:
+            | ((value: AxiosResponse<any, any>) => Promise<AxiosResponse<any, any>>)
+            | undefined;
+        failed?: ((error: any) => Promise<any>) | undefined;
+    },
+) => AxiosInstance = (config, token, fetched) => {
+    const success: (value: AxiosResponse<any, any>) => Promise<AxiosResponse<any, any>> =
+        fetched?.success ?? ((value) => Promise.resolve(value));
+    const failed: (error: any) => any = (error) => Promise.reject(error);
     let pendingMap = new Map();
     const options: RequestConfig = {
         baseURL: '/api/',
@@ -58,19 +67,17 @@ export const createRequest: (config?: RequestConfig, token?: string | null) => A
             }
             return params;
         },
-        (error) => {
-            return Promise.reject(error);
-        },
+        (error) => failed(error),
     );
 
     instance.interceptors.response.use(
         (response) => {
             pendingMap = removePending(response.config, pendingMap);
-            return response;
+            return success(response);
         },
         (error) => {
             pendingMap = error.config && removePending(error.config, pendingMap);
-            return Promise.reject(error);
+            return failed(error);
         },
     );
 

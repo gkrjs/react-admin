@@ -86,47 +86,6 @@ const getTable = (state: StorageState, dbname: string, name: string) => {
  * @param        {*} produce
  * @return       {*}
  */
-<<<<<<< HEAD
-export const storageReducer: Reducer<StorageState | undefined, DbAction> = produce(
-    (draft, action) => {
-        if (draft) {
-            switch (action.type) {
-                case DbActionType.ADD_DB:
-                    if (!getDb(draft, action.config.name)) {
-                        draft.dbs = [...draft.dbs, action.config as DbItem<TableItem>];
-                        initStorage(draft);
-                    }
-                    break;
-                case DbActionType.SET_DEFAULT_DB:
-                    if (draft.default !== action.name && getDb(draft, action.name))
-                        draft.default = action.name;
-                    break;
-                case DbActionType.DELETE_DB:
-                    draft.dbs = draft.dbs.filter((d) => d.name === action.name);
-                    initStorage(draft);
-                    break;
-                case DbActionType.ADD_TABLE: {
-                    const dbname = action.dbname ?? draft.default;
-                    draft.dbs.forEach((db, index) => {
-                        if (db.name === dbname && !getTable(draft, dbname, action.config.name)) {
-                            draft.dbs[index].tables.push(action.config as TableItem);
-                        }
-                    });
-                    initStorage(draft);
-                    break;
-                }
-                case DbActionType.SET_DEFAULT_TABLE: {
-                    const dbname = action.dbname ?? draft.default;
-                    draft.dbs.forEach((db, index) => {
-                        if (
-                            db.defaultTable !== action.name &&
-                            getTable(draft, dbname, action.name)
-                        ) {
-                            draft.dbs[index].defaultTable = action.name;
-                        }
-                    });
-                    break;
-=======
 export const storageReducer: Reducer<StorageState, DbAction> = produce((draft, action) => {
     switch (action.type) {
         case DbActionType.ADD_DB:
@@ -143,44 +102,22 @@ export const storageReducer: Reducer<StorageState, DbAction> = produce((draft, a
             draft.dbs = draft.dbs.filter((d) => d.name === action.name);
             fixStorage(draft);
             break;
-        case DbActionType.ADD_TABLE: {
-            const dbname = action.dbname ?? draft.default;
-            draft.dbs.forEach((db, index) => {
-                if (db.name === dbname && !getTable(draft, dbname, action.config.name)) {
-                    draft.dbs[index].tables.push(action.config as TableItem);
-                }
-            });
-            fixStorage(draft);
-            break;
-        }
         case DbActionType.SET_DEFAULT_TABLE: {
             const dbname = action.dbname ?? draft.default;
             draft.dbs.forEach((db, index) => {
                 if (db.defaultTable !== action.name && getTable(draft, dbname, action.name)) {
                     draft.dbs[index].defaultTable = action.name;
->>>>>>> 1ff6298ec41ef41865b28009e2e7518b1bc99383
                 }
-                case DbActionType.DELETE_TABLE: {
-                    const dbname = action.dbname ?? draft.default;
-                    draft.dbs.forEach((db, index) => {
-                        if (getTable(draft, dbname, action.name)) {
-                            draft.dbs[index].tables = db.tables.filter(
-                                (t) => t.name !== action.name,
-                            );
-                        }
-                    });
-                    initStorage(draft);
-                    break;
-                }
-<<<<<<< HEAD
-                default:
-                    initStorage(draft);
-                    break;
-            }
+            });
+            fixStorage(draft);
+            break;
         }
-    },
-);
-=======
+        case DbActionType.DELETE_TABLE: {
+            const dbname = action.dbname ?? draft.default;
+            draft.dbs.forEach((db, index) => {
+                if (getTable(draft, dbname, action.name)) {
+                    draft.dbs[index].tables = db.tables.filter((t) => t.name !== action.name);
+                }
             });
             fixStorage(draft);
             break;
@@ -190,4 +127,3 @@ export const storageReducer: Reducer<StorageState, DbAction> = produce((draft, a
             break;
     }
 });
->>>>>>> 1ff6298ec41ef41865b28009e2e7518b1bc99383

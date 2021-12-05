@@ -34,7 +34,7 @@ export const Loading: FC = () => (
  * @param {string} [parentPath]
  * @returns {*}  {string}
  */
-export const formatPath = <M extends Record<string, any> | null>(
+export const formatPath = <M extends Record<string, any>>(
     item: RouteOption<M>,
     basePath: string,
     parentPath?: string,
@@ -67,7 +67,7 @@ export const getAsyncPage = (props: {
         fallback,
     });
 };
-export const factoryRoutes = <M extends Record<string, any> | null>(
+export const factoryRoutes = <M extends Record<string, any>>(
     children: RouteOption<M>[],
     parent: ParentRouteProps<M>,
 ) => {
@@ -114,6 +114,6 @@ export const factoryRoutes = <M extends Record<string, any> | null>(
             nameMaps = { ...nameMaps, ...rst.nameMaps };
         }
         return route;
-    }) as RouteOption[];
+    }) as RouteObject[];
     return { routes, nameMaps };
 };

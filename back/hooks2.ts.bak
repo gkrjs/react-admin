@@ -1,41 +1,53 @@
 import { useCreation, useDeepCompareEffect } from 'ahooks';
 import merge from 'deepmerge';
 
+import type { Draft } from 'immer';
+
 import { isArray, omit } from 'lodash-es';
 import { useCallback, useState } from 'react';
 import type { RouteObject } from 'react-router-dom';
 import create from 'zustand';
+
 import shallow from 'zustand/shallow';
 
 import { zimmer } from '@/utils/helper';
 
-import { useUser } from '../Auth';
-import type { Permission, User } from '../Auth';
-
-import { useRequest } from '../Request';
+import { useAuth } from '../Auth';
 
 import { getDefaultState } from './_defaultConfig';
+import { useStore, useStoreApi } from './context';
 import type { RouteOption, RouterConfig, RouterState } from './types';
 import { factoryRoutes } from './utils';
 
-const useStore = create<RouterState>(zimmer(() => getDefaultState()));
-export const useInitRouter = (config: RouterConfig) => {
-    useDynamicRoutes();
-    useStore.setState((state) => merge(config, state) as RouterState, true);
+export const useRouterCreator = (config: RouterConfig) => {
+    const defaultState: RouterState = useCreation(() => getDefaultState(), []);
+    return useCallback(
+        () => create<RouterState>(zimmer(() => merge(defaultState, config) as RouterState)),
+        [config],
+    );
+};
+
+export const useRouterConfigure = () => {
+    const { setState } = useRouterActions();
+    return setState;
 };
 
 export const useRouter = () => {
+    useDynamicRoutes();
     const { constants, dynamic } = useStore((state) => state.routes, shallow);
     const [routes, setRoutes] = useState<RouteObject[]>([]);
     const [names, setNames] = useState<Record<string, string>>({});
     const config = useRouterConfig();
-    const user = useUser();
-
+    const addRoutes = useCallback(
+        useDynamicStore((state) => state.add),
+        [],
+    );
     const { basePath, render } = config;
+    const accessFilter = useAccessFilter();
     useDeepCompareEffect(() => {
         (async () => {
             const { routes: items, nameMaps } = factoryRoutes(
-                filteAccessRoutes([...constants, ...dynamic], user, config.permission),
+                await accessFilter([...constants, ...dynamic]),
                 {
                     basePath,
                     render,
@@ -49,48 +61,30 @@ export const useRouter = () => {
         config: useCreation(() => config, [config]),
         routes: useCreation(() => routes, [routes]),
         names: useCreation(() => names, [names]),
-    };
-};
-
-export const useRouterMutation = () => {
-    const addRoutes = useCallback(
-        useDynamicStore((state) => state.add),
-        [],
-    );
-    return {
-        configure: useCallback(useStore.setState, []),
         addRoutes,
     };
 };
 
-const filteAccessRoutes = (
-    routes: RouteOption[],
-    user: User | null,
-    permconf: RouterState['permission'],
-) => {
-    const permColumn = permconf.column;
-    let userPerms: Array<Permission<Record<string, any>>> = [];
-    if (!!user && user.permissions) userPerms = user.permissions;
-    const userPermNames = userPerms
-        .filter((p) => 'permColumn' in p && typeof p[permColumn] === 'string')
-        .map((p) => p[permColumn] as string);
-    return routes.filter((route) => {
-        const access = route.proteced ?? {};
-        const auth = access.auth ?? false;
-        const routePerms = access.permissions ?? [];
-        if (auth) {
-            if (
-                !user ||
-                (routePerms.length > 0 && !userPermNames.some((p) => routePerms.includes(p)))
-            ) {
-                return false;
-            }
-            if (route.children && route.children.length > 0) {
-                route.children = filteAccessRoutes(route.children, user, permconf);
-            }
-        }
-        return true;
-    });
+export const useRouterConfigGetter = () => {
+    const { getState } = useStoreApi();
+    return useCallback(getState, []);
+};
+export const useRouterActions = () => {
+    const { setState, subscribe, destroy } = useStoreApi();
+    return {
+        setState: useCallback(setState, []) as (
+            partial: ((draft: Draft<RouterState>) => void) | RouterState,
+            replace?: boolean,
+        ) => void,
+        subscribe: useCallback(subscribe, []),
+        destroy: useCallback(destroy, []),
+    };
+};
+
+const useAccessFilter = () => async (routes: RouteOption[]) => {
+    const {} = useAuth();
+
+    return routes;
 };
 const useRouterConfig = () => useStore((state) => omit(state, ['routes']), shallow);
 const useDynamicStore = create<{
@@ -111,7 +105,7 @@ const useDynamicStore = create<{
     })),
 );
 const useDynamicRoutes = () => {
-    const { configure } = useRouterMutation();
+    const { setState } = useRouterActions();
     const request = useRequest();
     const { server } = useRouterConfig();
     const dynamicRoutes = useDynamicStore((state) => state.routes, shallow);
@@ -129,7 +123,7 @@ const useDynamicRoutes = () => {
         })();
     }, [server]);
     useDeepCompareEffect(() => {
-        configure((draft) => {
+        setState((draft) => {
             draft.routes.dynamic = dynamicRoutes;
         });
     }, [dynamicRoutes]);

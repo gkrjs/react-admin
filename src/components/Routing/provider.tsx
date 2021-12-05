@@ -1,15 +1,15 @@
 import type { FC } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, HashRouter, useRoutes } from 'react-router-dom';
+import type { RouteObject } from 'react-router-dom';
 
-import { RouterContextProvider, useRouterCreator } from './hooks';
+import { useRouter } from './hooks';
 
-import type { RouterConfig } from './types';
-
-export const RouterWrapper: FC<{
-    config: Pick<RouterConfig, 'hash' | 'window' | 'basename'>;
-    routes: RouteObject[];
-}> = ({ config, routes }) => {
-    const { hash, window, basename } = config;
+export const RoutesList: FC<{ routes: RouteObject[] }> = ({ routes }) => useRoutes(routes);
+export const AppRouter: FC = () => {
+    const {
+        config: { hash, window, basePath: basename },
+        routes,
+    } = useRouter();
 
     // const { routes } = useAppRouter();
     return hash ? (
@@ -20,18 +20,5 @@ export const RouterWrapper: FC<{
         <BrowserRouter {...{ window, basename }}>
             <RoutesList routes={routes} />
         </BrowserRouter>
-    );
-};
-
-export const AppRouter: FC<{ config: RouterConfig }> = ({ config, children }) => {
-    const createStore = useRouterCreator(config);
-    return (
-        // eslint-disable-next-line react/jsx-no-constructed-context-values
-        <RouterContextProvider createStore={createStore}>
-            <RouterWrapper
-                config={{ ...pick(config, ['window', 'hash']), basename: basePath }}
-                routes={routes}
-            />
-        </RouterContextProvider>
     );
 };
