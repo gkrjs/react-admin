@@ -1,9 +1,10 @@
 import axios from 'axios';
-import type { AxiosResponse, AxiosRequestConfig, AxiosInstance } from 'axios';
+import type { AxiosRequestConfig, AxiosInstance } from 'axios';
 
+import merge from 'deepmerge';
 import produce from 'immer';
 
-import type { RequestConfig } from './types';
+import type { RequestConfig, RequestOption } from './types';
 
 function getPendingKey(config: AxiosRequestConfig) {
     const { url, method, params } = config;
@@ -38,48 +39,78 @@ function removePending(config: AxiosRequestConfig, maps: Map<string, any>) {
 
 export const createRequest: (
     config?: RequestConfig,
-    token?: string | null,
-    fetched?: {
-        success?:
-            | ((value: AxiosResponse<any, any>) => Promise<AxiosResponse<any, any>>)
-            | undefined;
-        failed?: ((error: any) => Promise<any>) | undefined;
-    },
-) => AxiosInstance = (config, token, fetched) => {
-    const success: (value: AxiosResponse<any, any>) => Promise<AxiosResponse<any, any>> =
-        fetched?.success ?? ((value) => Promise.resolve(value));
-    const failed: (error: any) => any = (error) => Promise.reject(error);
+    options?: RePartial<RequestOption>,
+) => AxiosInstance = (config, options) => {
     let pendingMap = new Map();
-    const options: RequestConfig = {
-        baseURL: '/api/',
-        timeout: 10000,
-        ...(config ?? {}),
-    };
-    const instance = axios.create(options);
-    instance.interceptors.request.use(
-        (params: RequestConfig) => {
-            pendingMap = removePending(params, pendingMap);
-            if (params.cancel_repeat) {
-                pendingMap = addPending(params, pendingMap);
-            }
-            if (token && typeof window !== 'undefined') {
-                options.headers = { ...(options.headers ?? {}), Authorization: token };
-            }
-            return params;
+    const configed: RequestConfig = merge(
+        {
+            baseURL: '/api/',
+            timeout: 10000,
         },
-        (error) => failed(error),
-    );
-
-    instance.interceptors.response.use(
-        (response) => {
-            pendingMap = removePending(response.config, pendingMap);
-            return success(response);
-        },
-        (error) => {
-            pendingMap = error.config && removePending(error.config, pendingMap);
-            return failed(error);
+        config ?? {},
+        {
+            arrayMerge: (_d, s, _o) => Array.from(new Set([..._d, ...s])),
         },
     );
+    const optioned: RequestOption = merge(
+        { token: null, withToken: false, interceptors: {} },
+        options ?? {},
+        {
+            arrayMerge: (_d, s, _o) => Array.from(new Set([..._d, ...s])),
+        },
+    ) as RequestOption;
+    const instance = axios.create(configed);
+    if (optioned.interceptors.request) {
+        optioned.interceptors.request(instance.interceptors.request);
+    } else {
+        instance.interceptors.request.use(
+            (params: RequestConfig) => {
+                pendingMap = removePending(params, pendingMap);
+                if (params.cancel_repeat) {
+                    pendingMap = addPending(params, pendingMap);
+                }
+                if (optioned.withToken && optioned.token && typeof window !== 'undefined') {
+                    params.headers = { ...(params.headers ?? {}), Authorization: optioned.token };
+                }
+                return params;
+            },
+            (error) => {
+                if (import.meta.env.DEV) console.log(error);
+                return error;
+            },
+        );
+    }
+    if (optioned.interceptors.response) {
+        optioned.interceptors.response(instance.interceptors.response);
+    } else {
+        instance.interceptors.response.use(
+            async (response) => {
+                if (optioned.withToken) {
+                    const resToken = response.headers.authorization;
+                    if (resToken && optioned.withToken && optioned.setToken) {
+                        await optioned.setToken(resToken);
+                    }
+                }
+                pendingMap = removePending(response.config, pendingMap);
+                return response;
+            },
+            async (error) => {
+                pendingMap = error.config && removePending(error.config, pendingMap);
+                if (import.meta.env.DEV) console.log(error);
+                switch (error.response.status) {
+                    case 401: {
+                        if (optioned.withToken && optioned.token && optioned.clearToken) {
+                            await optioned.clearToken();
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                return Promise.reject(error);
+            },
+        );
+    }
 
     return instance;
 };

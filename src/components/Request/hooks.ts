@@ -1,43 +1,53 @@
-import { useCreation } from 'ahooks';
 import type { AxiosInstance } from 'axios';
 
-import { useAuth } from '@/components/Auth/auth';
+import { useCallback, useRef, useState } from 'react';
+
+import { useAuth, useAuthInit } from '@/components/Auth/auth';
 
 import { createRequest } from './request';
 import type { RequestConfig } from './types';
 
-export function useRequest(): AxiosInstance;
-export function useRequest(withToken: boolean): AxiosInstance;
-export function useRequest(config: RequestConfig): AxiosInstance;
-export function useRequest(config?: RequestConfig | boolean, withToken?: boolean) {
+export function useRequest() {
+    const authInited = useAuthInit();
     const { token, setToken, clearToken } = useAuth();
-    const option: { config?: RequestConfig; withToken: boolean } = {
-        withToken: true,
-    };
-    if (typeof config === 'boolean') {
-        option.withToken = config;
-    } else if (typeof withToken === 'boolean') {
-        option.config = config;
-        option.withToken = withToken;
-    }
-    const instance = createRequest(option.config, option.withToken ? token : undefined, {
-        success: async (res) => {
-            const resToken = res.headers.authorization;
-            if (resToken && option.withToken) setToken(resToken);
-            return res;
-        },
-        failed: async (err) => {
-            console.log(err);
-            switch (err.response.status) {
-                case 401: {
-                    if (option.withToken && token) clearToken();
-                    break;
-                }
-                default:
-                    break;
+    const [initedReq, setInitReq] = useState<boolean>(false);
+    const [initedAuthReq, setInitAuthReq] = useState<boolean>(false);
+    const ref = useRef<AxiosInstance | null>(null);
+    const authRef = useRef<AxiosInstance | null>(null);
+    const getRequest = useCallback(
+        (config?: RequestConfig, reCreate?: boolean) => {
+            if (reCreate || !initedAuthReq) {
+                if (!initedReq) return null;
+                const instance = createRequest(config, {
+                    withToken: false,
+                });
+                ref.current = instance;
+                setInitReq(true);
+                return instance;
             }
-            return err;
+            if (ref.current) return ref.current;
+            return null;
         },
-    });
-    return useCreation(() => instance, [option.config, option.withToken, token]);
+        [initedReq, authInited],
+    );
+    const getAuthRequest = useCallback(
+        (config?: RequestConfig, reCreate?: boolean) => {
+            if (reCreate || !initedAuthReq) {
+                if (!authInited) return null;
+                const instance = createRequest(config, {
+                    withToken: true,
+                    token,
+                    setToken,
+                    clearToken,
+                });
+                authRef.current = instance;
+                setInitAuthReq(true);
+                return instance;
+            }
+            if (authRef.current) return authRef.current;
+            return null;
+        },
+        [initedAuthReq, authInited],
+    );
+    return { getRequest, getAuthRequest };
 }

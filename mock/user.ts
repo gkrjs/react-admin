@@ -78,7 +78,7 @@ export default [
             if (!checkUser) {
                 return resultError('The corresponding user information was not obtained!');
             }
-            return resultSuccess(checkUser);
+            return checkUser;
         },
     },
     {

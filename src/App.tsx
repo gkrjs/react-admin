@@ -1,21 +1,27 @@
 import './App.css';
-import { useInitUser } from './components/Auth';
-import { useInitConfig } from './components/Config';
-import { AppRouter } from './components/Router';
-import { useInitRouter } from './components/Routing';
-import { useInitStorage } from './components/Storage';
+import { useUserInit } from './components/Auth';
 
-import { config } from './config/app';
+import { AppRouter } from './components/Router';
+import { DDD, useRouter } from './components/Routing';
+
+import { useStorageInit } from './components/Storage';
 import { routing } from './config/routeConfig';
 
 import { router as routerConfig } from './config/router';
 
 const App = () => {
-    useInitConfig(config);
-    useInitStorage();
-    useInitUser();
-    useInitRouter(routing);
-    return <AppRouter config={routerConfig} />;
+    // useConfigInit(config);
+    useStorageInit();
+    useUserInit('/user/info');
+
+    const { inited } = useRouter(routing);
+    return (
+        inited && (
+            <DDD>
+                <AppRouter config={routerConfig} />
+            </DDD>
+        )
+    );
 };
 
 export default App;

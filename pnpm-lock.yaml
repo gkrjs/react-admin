@@ -18,6 +18,7 @@ specifiers:
   antd: ^4.16.13
   axios: ^0.24.0
   deepmerge: ^4.2.2
+  dequal: ^2.0.2
   eslint: ^8.2.0
   eslint-config-airbnb: 19.0.0
   eslint-config-airbnb-typescript: ^16.0.0
@@ -57,6 +58,7 @@ dependencies:
   antd: registry.npmmirror.com/antd/4.16.13_react-dom@17.0.2+react@17.0.2
   axios: registry.npmmirror.com/axios/0.24.0
   deepmerge: registry.nlark.com/deepmerge/4.2.2
+  dequal: registry.npmmirror.com/dequal/2.0.2
   immer: registry.npmmirror.com/immer/9.0.7
   localforage: registry.npmmirror.com/localforage/1.10.0
   lodash-es: registry.nlark.com/lodash-es/4.17.21
@@ -5065,6 +5067,13 @@ packages:
     dependencies:
       ms: registry.npmmirror.com/ms/2.1.2
     dev: true
+
+  registry.npmmirror.com/dequal/2.0.2:
+    resolution: {integrity: sha1-hcoiAl46h+Ze91p6Q3s1KEp+MZ0=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/dequal/download/dequal-2.0.2.tgz}
+    name: dequal
+    version: 2.0.2
+    engines: {node: '>=6'}
+    dev: false
 
   registry.npmmirror.com/detect-newline/3.1.0:
     resolution: {integrity: sha1-V29d/GOuGhkv8ZLYrTr2MImRtlE=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/detect-newline/download/detect-newline-3.1.0.tgz?cache=0&sync_timestamp=1634204106697&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fdetect-newline%2Fdownload%2Fdetect-newline-3.1.0.tgz}

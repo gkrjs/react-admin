@@ -7,8 +7,8 @@ import { FC, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useAuth } from '@/components/Auth/auth';
+
 import { useLocationPath } from '@/components/Router';
-import { useRequest } from '@/utils/request/hooks';
 
 const waitTime = (time = 100) => {
     return new Promise((resolve) => {
@@ -19,8 +19,8 @@ const waitTime = (time = 100) => {
 };
 
 const CredentialLoginForm: FC = () => {
-    const { clearToken, setToken } = useAuth();
-    const request = useRequest(false);
+    const { clearToken } = useAuth();
+    // const request = useAuthRequest();
     const { search } = useLocation();
     const { basePath } = useLocationPath();
     const [searchParams] = useSearchParams();
@@ -45,10 +45,10 @@ const CredentialLoginForm: FC = () => {
                 onFinish={async (values) => {
                     await clearToken();
                     try {
-                        const {
-                            data: { token },
-                        } = await request.post('/user/auth/login', values);
-                        if (token) await setToken(token);
+                        // const {
+                        //     data: { token },
+                        // } = await request.post('/user/auth/login', values);
+                        // if (token) await setToken(token);
                         message.success('登录成功');
                         console.log(redirect);
                         waitTime();

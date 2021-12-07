@@ -4,7 +4,9 @@ import type { FC, ReactElement } from 'react';
 import type { RouteObject } from 'react-router-dom';
 import { Navigate, Outlet } from 'react-router-dom';
 
-import type { ParentRouteProps, RouteOption } from './types';
+import type { Permission, User } from '../Auth';
+
+import type { RouterState, ParentRouteProps, RouteOption } from './types';
 
 const getAsyncImports = (imports: Record<string, () => Promise<any>>, reg: RegExp) => {
     return Object.keys(imports)
@@ -66,6 +68,56 @@ export const getAsyncPage = (props: {
         cacheKey: () => cacheKey,
         fallback,
     });
+};
+export const filterWhiteList = <M extends Record<string, any>>(
+    children: RouteOption<M>[],
+    parent: ParentRouteProps<M>,
+) => {
+    const routes = children.map((item, index) => {
+        const current: ParentRouteProps<M> = {
+            ...parent,
+            basePath: parent.basePath,
+            index: parent.index ? `${parent.index}.${index.toString()}` : index.toString(),
+        };
+        // 当前项是一个跳转路由
+        const currentPath = formatPath(item, parent.basePath, parent.path);
+        current.path = currentPath;
+
+        if (item.children) {
+            const rst = factoryRoutes(item.children, current);
+            if (route) route.children = rst.routes;
+            nameMaps = { ...nameMaps, ...rst.nameMaps };
+        }
+        return route;
+    }) as RouteObject[];
+    return { routes, nameMaps };
+};
+export const filteAccessRoutes = (
+    routes: RouteOption[],
+    user: User | null,
+    permconf: RouterState['permission'],
+): RouteOption<Record<string, any>>[] => {
+    const permColumn = permconf.column;
+    let userPerms: Array<Permission<Record<string, any>>> = [];
+    if (!!user && user.permissions) userPerms = user.permissions;
+    const userPermNames = userPerms
+        .filter((p) => 'permColumn' in p && typeof p[permColumn] === 'string')
+        .map((p) => p[permColumn] as string);
+    return routes
+        .filter((route) => {
+            const access = route.proteced ?? {};
+            const auth = access.auth ?? false;
+            const routePerms = access.permissions ?? [];
+            if (auth) {
+                if (!user) return false;
+                if (routePerms.length > 0) return userPermNames.some((p) => routePerms.includes(p));
+            }
+            return true;
+        })
+        .map((route) => {
+            if (!route.children) return route;
+            return { ...route, children: filteAccessRoutes(route.children, user, permconf) };
+        });
 };
 export const factoryRoutes = <M extends Record<string, any>>(
     children: RouteOption<M>[],

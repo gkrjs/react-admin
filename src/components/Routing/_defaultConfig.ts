@@ -10,6 +10,7 @@ export const getDefaultState: <M extends Record<string, any>>() => RouterState<M
     auth: {
         enabled: true,
         login_path: '/auth/login',
+        white_list: [],
     },
     permission: {
         enabled: true,

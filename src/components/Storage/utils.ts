@@ -102,11 +102,11 @@ export const storageReducer: Reducer<StorageState, DbAction> = produce((draft, a
             draft.dbs = draft.dbs.filter((d) => d.name === action.name);
             fixStorage(draft);
             break;
-        case DbActionType.SET_DEFAULT_TABLE: {
+        case DbActionType.ADD_TABLE: {
             const dbname = action.dbname ?? draft.default;
             draft.dbs.forEach((db, index) => {
-                if (db.defaultTable !== action.name && getTable(draft, dbname, action.name)) {
-                    draft.dbs[index].defaultTable = action.name;
+                if (db.name === dbname && !getTable(draft, dbname, action.config.name)) {
+                    draft.dbs[index].tables.push(action.config as TableItem);
                 }
             });
             fixStorage(draft);
@@ -117,6 +117,16 @@ export const storageReducer: Reducer<StorageState, DbAction> = produce((draft, a
             draft.dbs.forEach((db, index) => {
                 if (getTable(draft, dbname, action.name)) {
                     draft.dbs[index].tables = db.tables.filter((t) => t.name !== action.name);
+                }
+            });
+            fixStorage(draft);
+            break;
+        }
+        case DbActionType.SET_DEFAULT_TABLE: {
+            const dbname = action.dbname ?? draft.default;
+            draft.dbs.forEach((db, index) => {
+                if (db.defaultTable !== action.name && getTable(draft, dbname, action.name)) {
+                    draft.dbs[index].defaultTable = action.name;
                 }
             });
             fixStorage(draft);

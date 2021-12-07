@@ -45,6 +45,7 @@ export interface RouterConfig<M extends Record<string, any> = Record<string, any
     auth?: {
         enabled?: boolean;
         login_path?: string;
+        white_list?: string[];
     };
     permission?: {
         enabled?: boolean;

@@ -1,4 +1,10 @@
 // Interface data format used to return a unified format
+export function resultItems<T = Record<string, any>>(data: T, meta: Record<string, any> = {}) {
+    return {
+        data,
+        meta,
+    };
+}
 
 export function resultSuccess<T = Record<string, any>>(result: T, { message = 'ok' } = {}) {
     return {
